@@ -1,5 +1,4 @@
-% Transforms a matrix into upper Hessenberg form using Householder
-% reflectors
+% Transforms a matrix into upper Hessenberg form using Householder reflectors
 function U = uhess(M)
 n = length(M);
 for i = 1:(n-2)
