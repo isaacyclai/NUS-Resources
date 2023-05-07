@@ -1,5 +1,4 @@
-% Gram-Schmidt on the first four monomial bases to get Chebyshev
-% polynomials
+% Gram-Schmidt on the first four monomial bases to get Chebyshev polynomials
 m1 = @(x) 1;
 m2 = @(x) x;
 m3 = @(x) x.^2;
