@@ -1,0 +1,184 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+\newtheorem{theorem}{Theorem}
+\title{MA2108 Mathematical Analysis I Cheatsheet}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{center}
+     \Large{\textbf{MA2108 Mathematical Analysis I (AY 22/23 S2)}} \\
+	 \small{by Isaac Lai}
+\end{center}
+\begin{multicols}{3}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Completeness Property of $\mathbb{R}$}
+Let $E$ be a non-empty set of real numbers. A real number  $M\in\mathbb{R}$ is called the \textbf{least upper bound} or \textbf{supremum} of  $E$ if (i)  $M$ is an upper bound of  $E$ and (ii) if  $M'$ is an upper bound of  $E$, then  $M'\geq M$. Similar definition for infimum.\\
+Every nonempty subset of $\mathbb{R}$ which is bounded above has a supremum in  $\mathbb{R}$.\\
+Every nonempty subset of  $\mathbb{R}$ which is bounded below has an infimum in  $\mathbb{R}$.\\
+\textbf{Archimedian property of $\mathbb{R}$} For any $x\in\mathbb{R}$, there exists  $n_x\in\mathbb{N}$ such that  $x<n_x$.\\
+\textbf{Density Theorem} For any two real numbers $x,y\in\mathbb{R}$ satisfying  $x<y$, there exists a rational number  $r\in\mathbb{Q}$ such that  $x<r<y$.\\
+\textbf{Corollary of the Density Theorem} If  $a,b\in\mathbb{R}$ is such that  $a<b$, then there exists  $x\in\mathbb{R}\backslash\mathbb{Q}$ such that  $a<x<b$.
+
+\section{Sequences}
+Let $a\in\mathbb{R}$ and  $\epsilon>0$. Then  $\epsilon$-neighbourhood of  $a$ is the set  $V_\epsilon(a)=\{x\in\mathbb{R}:|x-a|<\epsilon\}=(a-\epsilon,a+\epsilon)$.\\
+We say that $x$ is the limit of $(x_n)$ if for every $\epsilon>0$ there exists  $K=K(\epsilon)\in\mathbb{N}$ such that  $n\geq K \implies |x_n-x|<\epsilon$.\\
+A sequence  $(x_n)$ is bounded if there exists  $M>0$ such that  $|x_n|\leq M$ for all  $n\in\mathbb{N}$.\\
+Every convergent sequence is bounded.\\
+\textbf{Squeeze Theorem} If  $x_n\leq y_n\leq z_n$ for all  $n\in\mathbb{N}$ and  $\lim\limits_{n\to\infty}x_n=\lim\limits_{n\to\infty}z_n=a$, then  $\lim\limits_{n\to\infty}y_n=a$.\\
+Let $(x_n)$ be a sequence of positive real numbers such that $L:=\lim\frac{x_{n+1}}{x_n}$ exists. If $|L|<1$, then  $(x_n)$ converges and  $\lim(x_n)=0$.\\
+\textbf{List of limits of some standard sequences} Let $k,l\in\mathbb{N}$ and  $a,b,c\in\mathbb{R}$ be fixed numbers. Then we have
+ \begin{enumerate}
+	 \item $\lim\limits_{n\to\infty}\frac{1}{n^k}=0$
+	 \item $\lim\limits_{n\to\infty}b^n=0$ if $|b|<1$
+	 \item $\lim\limits_{n\to\infty}c^{\frac{1}{n}}=1$ if $c>0$
+	 \item  $\lim\limits_{n\to\infty}n^{\frac{1}{n}}=1$ 
+	 \item $\lim\limits_{n\to\infty}\left(1+\frac{1}{n}\right)^n=e$ 
+	\item $n^k<<n^l<<a^n<<b^n<<n!$ if  $k<l$ and  $1<a<b$
+	\item Arithmetic operations, modulus, square roots,  $\leq$ and  $\geq$ are all preserved upon taking limits.
+ \end{enumerate}
+ \textbf{Monotone Convergence Theorem} Let $(x_n)$ be a monotone sequence of real numbers. Then  $(x_n)$ is convergent  $\iff$  $(x_n)$ is bounded. If  $(x_n)$ is bounded and increasing, then  $\lim x_n=\sup\{x_n:n\in\mathbb{N}\}$, and if  $(x_n)$ is bounded and decreasing, then  $\lim x_n=\inf\{x_n:n\in\mathbb{N}\}$.\\
+ If $(x_n)$ converges to  $x$, then any subsequence  $(x_{n_k})$ also converges to  $x$.\\
+ \textbf{Monotone Subsequence Theorem} Every sequence has a monotone subsequence.\\
+ \textbf{Bolzano-Weierstrass Theorem} Every bounded sequence has a convergent subsequence.\\
+ Let $(x_n)$ be a sequence of real numbers. A real number  $x$ is called a subsequential limit of  $(x_n)$ if  $(x_n)$ has a subsequence  $(x_{n_k})$ which converges to  $x$. Let $S(x_n)$ denote the set of all subsequential limits of  $(x_n)$. If  $(x_n)$ is a bounded sequence,  $\lim\sup x_n:=\sup S(x_n)$ and  $\lim\inf x_n:=\inf S(x_n)$.\\
+ \textbf{Cauchy sequence} For every $\epsilon>0$, there exists  $K=K(\epsilon)\in\mathbb{N}$ such that  $|x_n-x_m|<\epsilon$ for all  $n,m\geq K$.\\
+ \textbf{Cauchy convergence criterion} A sequence of real numbers is convergent iff it is a Cauchy sequence.\\
+ A sequence  $(x_n)$ is \textbf{contractive} if there exists  $C$ with  $0<C<1$ such that  $|x_{n+2}-x_{n+1}|\leq C|x_{n+1}-x_n|$ for all $n\in\mathbb{N}$. Every contractive sequence is Cauchy (and thus convergent).
+
+\section{Infinite Series}
+\textbf{n-th term divergence test} If $\lim\limits_{n\to\infty}a_n\neq 0$ (or does not exist), then  $\sum_{n=1}^\infty a_n$ diverge s. No conclusion if the limit is $0$.\\
+\textbf{Cauchy criterion for series} The series $\sum_{n=1}^\infty a_n$ converges iff for every  $\epsilon>0$ there exists  $K=K(\epsilon)\in\mathbb{N}$ such that  $|a_{n+1}+a_{n+2}+\cdots+a_m|<\epsilon$ for all  $n>n\geq K$.\\
+If $p>1$, then the  $p$-series  $\sum_{n=1}^\infty \frac{1}{n^p}$ converges. If $p\leq 1$ then the  $p$-series diverges.\\
+\textbf{Comparison Test} Consider 2 eventually non-negative series $\sum_{k=1}^\infty a_k$ and  $\sum_{k=1}^\infty b_k$. Suppose there exists  $K\in\mathbb{N}$ such that  $0\leq a_k\leq b_k$ for all  $k\geq K$. Then  $\sum_{k=1}^\infty b_k$ converges  $\implies$  $\sum_{k=1}^\infty a_k$ converges, and  $\sum_{n=1}^\infty a_k$ diverges  $\implies$  $\sum_{k=1}^\infty b_k$ diverges. Apply when series looks like geometric or $p$-series. Try CT instead of LCT if there is an oscillating factor.\\
+\textbf{Limit Comparison Test} Let $\sum_{n=1}^\infty$ and $\sum_{n=1}^\infty b_n$ be two eventually positive series, and suppose the limit  $\rho=\lim\limits_{n\to\infty}\frac{a_n}{b_n}$ exists. Then (i) if $\rho>0$ either the two series both converge or both diverge, or (ii) if  $\rho=0$ and  $\sum_{n=1}^\infty b_n$ converges, then  $\sum_{n=1}^\infty a_n$ converges. Similar application to CT.\\
+\textbf{Ratio test} Let $\sum_{n=1}^\infty a_n$ be an eventually positive series, and suppose the limit $\rho=\lim\limits_{n\to\infty}\frac{a_{n+1}}{a_n}$ exists. Then (i) if $\rho<1$ the series converges, (ii) if  $\rho>1$ the series diverges, and (iii) no conclusion if  $\rho=1$. Apply to certain series that look like geometric series, series with $n!$, recursively-defined series.\\
+\textbf{Root test} Let  $\sum_{n=1}^\infty a_n$ be an eventually non-negative series, and suppose  $(a_n^{1/n})$ is a bounded sequence. Let $\rho=\lim\sup a_n^{1/n}$. Then (i) if $\rho<1$ the series converges, (ii) if  $\rho>1$ the series diverges, and (iii) no conclusion if  $\rho=1$. Apply when $a_n$ involves a higher power.\\
+\textbf{Simplified root test} Let  $\sum_{n=1}^\infty a_n$ be an eventually non-negative series, and suppose  $\rho=\lim\limits_{n\to\infty} a_n^{1/n}$ exists. Then (i) if  $\rho<1$ the series converges, (ii) if  $\rho>1$ the series diverges, and (iii) no conclusion if $\rho=1$.\\
+\textbf{Alternating Series Test} Let $\sum_{n=1}^\infty(-1)^{n+1}a_n$ be an altenrating series. Suppose
+ \begin{enumerate}
+	 \item $a_n\geq 0$ for all  $n$
+	\item  $(a_n)$ is decreasing
+	\item $\lim\limits_{n\to\infty}a_n=0$.
+\end{enumerate} Then the series is convergent.\\
+The series $\sum_{n=1}^\infty a_n$ \textbf{converges absolutely} if the series  $\sum_{n=1}^\infty|a_n|$ converges. It \textbf{converges conditionally} if (i)  $\sum_{n=1}^\infty a_n$ converges and (ii)  $\sum_{n=1}^\infty|a_n|$ diverges. Also, if a series converges absolutely, then it converges.\\
+Every series is either absolutely convergent, conditionally convergent, or divergent.
+
+\section{Limits of functions}
+Let $\emptyset\neq A\subseteq\mathbb{R}$. A number  $c\in\mathbb{R}$ is said to be a \textbf{cluster point} of  $A$ if for every  $\delta>0$, the open interval  $(c-\delta,c+\delta)$ contains a point of  $A\backslash\{c\}$.\\
+\textbf{$\epsilon-\delta$ definition of a limit} Let $f:A\to\mathbb{R}$ be a function, where  $\emptyset\neq A\subseteq\mathbb{R}$, and let  $c$ be a cluster point of  $A$. A real number  $L$ is the limit of  $f$ at  $x=c$ if for every  $\epsilon>0$, there exists  $\delta=\delta(\epsilon)>0$ such that $x\in A, 0<|x-c|<\delta\implies |f(x)-L|<\epsilon$.\\
+\textbf{Sequential Criterion for Limits} Let $f:A\to\mathbb{R}$ and  $c$ be a cluster point of $A$. Then the following statements are equivalent: (i)$\lim\limits_{x\to c}f(x)=L$ and (ii) for every sequence $(x_n)$ in  $A\backslash\{c\}$ satisfying  $\lim\limits_{n\to\infty}x_n=c$, one has  $\lim\limits_{n\to\infty}f(x_n)=L$.\\
+Arithmetic operations, $\leq$ and  $\geq$ are preserved upon taking limits of functions.\\
+\textbf{Squeeze Theorem} Let $A\subseteq\mathbb{R}$, and let  $f,g,h:A\to\mathbb{R}$ be a cluster point of  $A$. Suppose that  $f(x)\leq g(x)\leq h(x)$ for all $x\in A$ and  $\lim\limits_{x\to c}f(x)=\lim\limits_{x\to c}h(x)=L$, then  $\lim\limits_{x\to c}g(x)=L$.\\
+Let $A\subseteq\mathbb{R}$ and let  $f:A\to\mathbb{R}$.
+ \begin{enumerate}
+	 \item Let $c$ be a cluster point of  $A\cap(c,\infty)$.  $L$ is the \textbf{right-hand limit} of  $f$ at  $c$ if for any given  $\epsilon>0$, there exists $\delta=\delta(\epsilon)>0$ such that  $x\in A, c<x<c+\delta\implies|f(x)-L|<\epsilon$.
+	 \item Let $c$ be a cluster point of  $A\cap(-\infty, c)$.  $L$ is the \textbf{left-hand limit} of  $f$ at  $c$ if for any given  $\epsilon>0$, there exists  $\delta=\delta(\epsilon)>0$ such that  $x\in A,c-\delta<x<c\implies|f(x)-L|<\epsilon$.
+\end{enumerate}
+$\lim\limits_{x\to c}f(x)=L$ exists iff  $\lim\limits_{x\to c^+}f(x)=\lim\limits_{x\to c^-}f(x)=L$.\\
+\textbf{Sequential Criterion for right-hand limits (similarly for left-hand)} Let $f: A\to\mathbb{R}$ be a function, and let  $c$ be a cluster point of  $A\cap(c,\infty)$. Then the following statements are equivalent: (i)  $\lim\limits_{x\to c^+}f(x)=L$ and (ii) for every sequence $(x_n)$ in  $A\cap(c,\infty)$ satisfying  $\lim\limits_{n\to\infty}x_n=c$, one has  $\lim\limits_{n\to\infty}f(x_n)=L$.\\
+\textbf{Infinite limit} Let  $f:A\to\mathbb{R}$ be a function, and let  $c$ be a cluster point of  $A$. Then  $f(x)$ tends to  $\infty$ as  $x\to c$ if for every  $M>0$, there exists  $\delta=\delta(M)>0$ such that  $x\in A,0<|x-c|<\delta\implies f(x)>M$. Similary definition for  $-\infty$. Sequential criterion is similar to the previous ones.\\
+\textbf{Limits at infinity} Let $A\subseteq\mathbb{R}$, and let  $f:A\to\mathbb{R}$ be a function. Suppose that  $A$ is not bounded above. Then  $L$ is the limit of  $f$ as  $x\to\infty$ if for any given  $\epsilon>0$, there exists  $M=M(\epsilon)>0$ such that  $x\in A,x>M\implies|f(x)-L|<\epsilon$. Similar definition for  $-\infty$. Sequential criterion is also similar to previous ones.
+
+\section{Continuous functions}
+\textbf{$\epsilon-\delta$ definition of continuity} Let $A\subseteq\mathbb{R}$ and let  $a\in A$. A function  $f:A\to\mathbb{R}$ is continuous at  $x=a$ if for any given  $\epsilon>0$, there exists  $\delta=\delta(\epsilon,a)>0$ such that  $x\in A,|x-a|<\delta\implies|f(x)-f(a)|<\epsilon$.\\
+$f$ is continuous at  $x=a\iff\lim\limits_{x\to a}f(x)=f(a)$.\\
+\textbf{Sequential Criterion for Continuity} Let $A\subseteq\mathbb{R}$,  $a\in A$ and  $f:A\to\mathbb{R}$. Then the following are equivalent: (i)  $f$ is continuous at  $a$, and (ii) for every sequence  $(x_n)$ in  $A$ satisfying  $\lim\limits_{n\to\infty}x_n=a$, one has  $\lim\limits_{n\to\infty}f(x_n)=f(a)$.\\
+Finding points at which a piecewise function $f$ is defined differently for $x\in\mathbb{Q}$ and  $x\in\mathbb{R}\backslash\mathbb{Q}$ is continuous: suppose $f$ is continuous, and consider rational and irrational sequences that converge to the same point. Equate the limits of the two functions to solve for the point(s). Then use the $\epsilon-\delta$ definition to prove that  $f$ is indeed continuous there.\\
+\textbf{Combinations of continuous functions} If $f$ and  $g$ are continuous at  $x=c$, then  $f\pm g, f\cdot g$, and $bf$ are also continuous at  $x=c$, where  $b$ is a constant. If  $g(c)\neq 0$ then $f/g$ is also continuous  at $x=c$.\\
+Compositions of continuous functions are also continuous.\\
+A function $f:A\to\mathbb{R}$ is said to be bounded on  $A$ if the image of  $f(A)$ is a bounded set, i.e. there exists  $M>0$ such that  $|f(x)|\leq M$ for all  $x\in A$.\\
+\textbf{Absolute extrema} Let  $A\subseteq\mathbb{R}$ and let  $f:A\to\mathbb{R}$.  $f$ has an absolute maximum on  $A$ if there exists  $x'\in A$ such that  $f(x')\geq f(x)$ for all  $x\in A$. Similar definition for minimum.\\
+\textbf{Extreme Value Theorem} Suppose that  $f:[a,b]\to\mathbb{R}$ is a continuous function on the closed bounded interval  $[a,b]$. Then  $f$ has an absolute maximum and an absolute minimum on  $[a,b]$, i.e. there exist  $c_1, c_2\in[a,b]$ such that $f(c_1)\leq f(x)\leq f(c_2)$ for all $x\in[a,b]$.\\
+\textbf{Intermediate Value Theorem} Suppose that a function $f:[a,b]\to\mathbb{R}$ is continuous on the closed bounded interval  $[a,b]$. Then for any number  $L$ strictly between  $f(a)$ and $f(b)$, there exists  $c\in(a,b)$ such that  $f(c)=L$.\\
+Let  $a,b\in\mathbb{R}$ with  $a<b$. Suppose that  $f:[a,b]\to\mathbb{R}$ is continuous on the closed bounded interval  $[a,b]$. Then the image  $f([a,b])$ is also a closed bounded interval.\\
+\textbf{Preservation of intervals} Let  $I$ be an interval in  $\mathbb{R}$, and suppose a function  $f: I\to\mathbb{R}$ is continuous on I. Then  $f(I)$ is an interval.\\
+Let $A\subseteq\mathbb{R}$ and let  $f:A\to\mathbb{R}$ be a function.  $f$ is increasing on  $A$ if  $x_1,x_2\in A,x_1\leq x_2\implies f(x_1)\leq f(x_2)$. Similar definition for strictly increasing, decreasing, strictly decreasing. A function is monotone on $A$ if it is either increasing or decreasing on  $A$. Similar for strictly monotone.\\
+Let  $f:I\to\mathbb{R}$ be increasing on  $I$. If  $c\in I$ is not an endpoint of  $I$, then
+ \begin{enumerate}
+	 \item $\lim\limits_{x\to c^-}f(x)=\sup\{f(x):x\in I,x<c\}$
+	 \item  $\lim\limits_{x\to c^+}f(x)=\inf\{f(x):x\in I,x>c\}$
+	 \item $\lim\limits_{x\to c^-}f(x)\leq f(c)\leq\lim\limits_{x\to c^+}f(x)$
+\end{enumerate}
+$j_f(c)=\lim\limits_{x\to c^+}f(x)-\lim\limits_{x\to c^-}f(x)$ is called the \textbf{jump} of  $f$ at  $c$.\\
+\textbf{Continuous Inverse Theorem} Let $I\subseteq\mathbb{R}$ be an interval and  $f:I\to\mathbb{R}$ be a strictly monotone function. If  $f$ is continuous on  $I$ and  $J=f(I)$, then its inverse function  $f^{-1}:J\to\mathbb{R}$ is strictly monotone and continuous on  $J$.\\
+\textbf{Uniform continuity} Let  $A\subseteq\mathbb{R}$. A function  $f:A\to\mathbb{R}$ is said to be uniformly continuous on  $A$ if for any given  $\epsilon>0$, there exists  $\delta=\delta(\epsilon)>0$ such that  $x,u\in A, |x-u|<\delta\implies|f(x)-f(u)|<\epsilon$. (Note that $\delta$ depends only on  $\epsilon$ and not  $a$.) \\
+If $f$ is uniformly on continuous on  $A$, then  $f$ is continuous on  $A$, but the converse is not true in general.\\
+\textbf{Sequential Criterion for uniform continuity} Let  $A\subseteq\mathbb{R}$, and let  $f:A\to\mathbb{R}$ be a function. Then the following two statements are equivalent: (i)  $f$ is uniformly continuous on  $A$, and (ii) for any two sequences  $(x_n)$ and  $(u_n)$ in  $A$ such that  $x_n-u_n\to 0$, we have  $f(x_n)-f(u_n)\to 0$.\\
+Let  $f:[a,b]\to\mathbb{R}$ be continuous on a closed bounded interval  $[a,b]$. Then  $f$ is uniformly continuous on  $[a,b]$.
+
+\section{Metric Spaces}
+A \textbf{metric} on the set $S$ is a function  $d:S\times S\to\mathbb{R}$ that satisfies the following properties:
+ \begin{enumerate}
+	 \item \textit{(Positivity)} $d(x,y)\geq 0$ for all $x,y\in S$
+	\item \textit{(Definiteness)} $d(x,y)=0$ iff  $x=y$
+	\item \textit{(Symmetry)}  $d(x,y)=d(y,x)$ for all $x,y\in S$
+	\item \textit{(Triangle inequality)}  $d(x,y)\leq d(x,z)+d(z,y)$ for all  $x,y,z\in S$
+\end{enumerate} A metric space $(S,d)$ is a set  $S$ together with a metric  $d$ on  $S$.
+Usual metric on $\mathbb{R}$: $d(x,y):=|x-y|$, Euclidean metric on $\mathbb{R}^2$ (generalisable to $\mathbb{R}^n)$:  $d(x,y):=\sqrt{(x_1-y_1)^2+(x_2-y_2)^2}$, $d_1(x,y):=\sum_{i=1}^n|x_i-y_i|$, $d_\infty(x,y):=\max_{1\leq i\leq n}|x_i-y_i|$
+\textbf{Cauchy-Schwarz Inequality} Let $n\in\mathbb{N}$. Let  $a=(a_1,\dots,a_n), b=(b_1,\dots,b_n)$ be two $n$-tuples of real numbers. Then we have
+\[
+	\left|\sum_{i=1}^n a_i b_i\right|\leq\left(\sum_{i=1}^n a_i^2\right)^{\frac{1}{2}}\cdot\left(\sum_{i=1}^n b_i^2\right)^{\frac{1}{2}}
+\]
+\textbf{Neighbourhood} Let $(S,d)$ be a metric space. For  $\epsilon>0$, the  $\epsilon$-neighbourhood of a point  $c$ in  $S$ is the set  $V_\epsilon(c):=\{x\in S:d(x,c)<\epsilon\}$. If  $(S,d)=(\mathbb{R},d)$, then  $V_\epsilon(c)=(c-\epsilon,c+\epsilon)$. A set $U$ is called a \textbf{neighbourhood} of  $x$ if  $U$ contains an  $\epsilon$-neighbourhood of  $x$ for some  $\epsilon>0$.\\
+\textbf{Convergence} Let $(x_n)$ be a sequence of points in  $(S,d)$. Let  $x\in S$. The sequence  $(x_n)$ is said to converge to  $x$ in  $S$ if for every  $\epsilon>0$ there exists  $K=K(\epsilon)\in\mathbb{N}$ such that  $n\geq K\implies d(x_n,x)<\epsilon$.\\
+$\lim\limits_{n\to\infty}x_n=x\iff\lim\limits_{n\to\infty}d(x_n,x)=0$\\
+\textbf{Open Set} Let $(S,d)$ be a metric space. A subset  $G$ of  $S$ is said to be an open set in  $S$ if for each  $x\in G$, there exists a neighbourhood  $V$ of  $x$ such that  $V\subseteq G$. Equivalently,
+ \begin{enumerate}
+	 \item For each $x\in G$ there exists  $\epsilon=\epsilon(x)>0$ such that  $V_\epsilon(x)\subseteq G$
+	\item For each  $x\in G$,  $G$ is a neighbourhood of  $x$
+\end{enumerate}
+To show a set is open, choose some $\epsilon$ and substitute into the definition of a neighbourhood.\\
+The empty set and the whole set are open, an arbitrary union of open sets is open, and any finite intersection of open sets is open. The intersection of infinitely many open sets may not be open.\\
+\textbf{Closed Set} Let $(S,d)$ be a metric space. A subset  $F$ of  $S$ is said to be closed in  $S$ if the complement  $C(F):=S\backslash F$ is open in  $S$. Equivalently, we have that for each $y\in S\backslash F$, there exists  $\epsilon=\epsilon(y)>0$ such that  $V_\epsilon(y)\cap F=\emptyset$.\\
+The empty set and the whole set are closed, an arbitrary intersection of closed sets is closed, and any finite union of closed sets is closed. The union of infinitely many closed sets may not be closed.\\
+\textbf{Continuity} Let $(S_1,d_1)$ and $(S_2,d_2)$ be metric spaces, and let $A\subseteq S_1$. Let $f:A\to S_2$ be a function from $A\subseteq S_1$ to $S_2$. The function $f$ is continuous at  $c\in A$ if for every  $\epsilon>0$, there exists  $\delta=\delta(\epsilon,c)>0$ such that  $x\in A, d_1(x,c)<\delta\implies d_2(f(x),f(c))<\epsilon$.\\
+\textbf{Global Continuity Theorem} Let $(S_1,d_1)$ and $(S_2,d_2)$ be metric spaces. Let $A\subseteq S_1$, and let $f:A\to S_2$ be a function. Then the following are equivalent: (i) $f$ is continuous on $A$ and (ii) for every open set  $G\subseteq S_2$, there exists an open set $H\subseteq S_1$ such that $f^{-1}(G)=A\cap H$.\\
+\textbf{Sequential Criterion for Continuity} Let  $(S_1,d_1)$ and $(S_2,d_2)$ be two metric spaces. Let $A\subseteq S_1$, and let $f:A\to S_2$ be a function. Let $c\in A$. Then the following are equivalent: (i)  $f$ is continuous at  $c$ and (ii) for every sequence  $(x_n)$ in  $A$ satisfying $\lim\limits_{n\to\infty}x_n=c$,  $\lim\limits_{n\to\infty}f(x_n)=f(c)$.\\
+Let $(S,d)$ be a metric space. A subset  $A\subseteq S$ is bounded if there exist  $x_0\in S$ and  $M>0$ such that  $d(x,x_0)\leq M$ for all  $x\in A$.\\
+\textbf{Sequential Compactness} Let  $(S,d)$ be a metric space. A subset  $A\subseteq S$ is sequentially compact if every sequence in  $A$ has  a convergent subsequence whose limit is in  $A$.\\
+Let  $(S,d)$ be a metric space. Suppose a subset  $A\subseteq S$ is sequentially compact. Then  $A$ is closed and bounded in  $S$.\\
+\textbf{Heine-Borel Theorem} Let  $k\in\mathbb{N}$. Consider the Euclidean  $k$-space  $(\mathbb{R}^k,d_2)$ where $d_2$ is the Euclidean metric on $\mathbb{R}^k$. Then a subset  $A\subseteq\mathbb{R}^k$ is sequentially compact iff  $A$ is closed and bounded in  $(\mathbb{R}^k,d_2)$.\\
+Let $(S_1,d_1)$ and $(S_2,d_2)$ be two metric spaces. Let $A\subseteq X$, and suppose a function  $f:A\to S_2$ is continuous on $A$. If  $A$ is sequentially compact in  $(S_1,d_1)$, then the image $f(A)$ is sequentially compact in  $(S_2,d_2)$.\\
+\textbf{Extreme Value Theorem} Let $(S,d)$ be a metric space, and let  $\emptyset\neq A\subseteq S$ be a sequentially compact set. Suppose  $f:A\to\mathbb{R}$ is a continuous (real-valued) function on  $A$. Then there exist  $x_1,x_2\in A$ such that $f(x_1)\leq f(x)\leq f(x_2)$ for all $x\in A$.
+\end{multicols}
+
+\end{document}
