@@ -1,3 +1,4 @@
+% Back substitution (combine with Gaussian elimination for Gauss-Jordan Elimination)
 function b = backsub(A)
 n = size(A,1);
 for i=n:-1:1
