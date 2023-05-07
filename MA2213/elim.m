@@ -1,3 +1,4 @@
+% Gaussian Elimination
 function A = elim(A,b);
 A = [A b];
 n = size(A, 1);
