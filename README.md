@@ -1,9 +1,10 @@
-# Cheatsheets
+# NUS Resources
 
-A collection of cheatsheets (and some other resources) for NUS courses.
+A collection of resources (mostly cheatsheets) for NUS courses.
 
-**MA2108** (Mathematical Analysis I)
-- Cheatsheet
+**AY22/23 S2**
+- MA2108 Mathematical Analysis I 
+- MA2213 Numerical Analysis I
 
-**MA2213** (Numerical Analysis I)
-- MATLAB code for various algorithms
+**AY23/24 S2**
+- CS3230 Design and Analysis of Algorithms
