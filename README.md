@@ -1,4 +1,4 @@
-# Cheatsheets
+# NUS Resources
 
 A collection of resources (mostly cheatsheets) for NUS courses.
 
