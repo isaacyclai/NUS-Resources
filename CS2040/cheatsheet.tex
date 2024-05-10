@@ -1,0 +1,405 @@
+\documentclass[10pt,landscape,a4paper]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage[linewidth=1pt]{mdframed}
+\usepackage{enumitem}
+
+\usepackage{algorithm2e}
+\AtBeginEnvironment{algorithm}{\let\textnormal\ttfamily}
+\RestyleAlgo{boxed}
+\SetArgSty{upshape}
+\SetProgSty{upshape}
+\renewcommand{\ProgSty}[1]{\textnormal{#1}\unskip} % removed \emph{}
+
+\setlist[itemize]{align=parleft,left=0pt..1em}
+\setlist[enumerate]{align=parleft,left=0pt..1em}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+\setlength{\columnseprule}{0.1pt}
+
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+\newcommand{\mb}[1]{\mathbf #1}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\innerproduct}[2]{\left\langle #1, #2 \right\rangle}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\curl}{\text{curl }}
+\newcommand{\dvg}{\text{div }}
+
+\newcommand{\adj}{\text{adj }}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% -----------------------------------------------------------------------
+\newtheorem{theorem}{Theorem}
+\title{CS2040 Data Structures and Algorithms}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{4}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+\begin{mdframed}
+\begin{center}
+	\large{\textbf{CS2040 Data Structures and Algorithms}}\\
+	\normalsize{\textbf{AY23/24 S1}}\\
+	\small{by Isaac Lai}
+\end{center}
+\end{mdframed}
+
+
+\section{Analysis of Algorithms}
+\begin{itemize}
+	\item Given a function $f(n)$, $g(n)$ is an asymptotic \textbf{upper bound} of  $f(n)$, denoted $f(n)=O(g(n))$ if there exists a constant  $c>0$ and positive integer  $n_0$ such that $f(n)\leq c\cdot g(n)\ \forall n\geq n_0$.	
+	\item Common growth terms: $O(1)<O(\log n)<O(n)<O(n\log n)<O(n^2)<O(n^3)<O(2^n)<O(n!)$
+	\item Ignore low-order terms and multiplicative constants in the higher-order term
+\end{itemize}
+
+\section{Sorting}
+\subsection{Selection sort}
+Given an array of $n$ items,
+\begin{enumerate}
+	\item Find the \textbf{largest} item.
+	\item \textbf{Swap} it with the item at the \textbf{end} of the array.
+	\item Go to step $1$ by excluding the largest item from the array.
+\end{enumerate}
+Time complexity: $O(n^2)$
+\subsection{Bubble sort}
+\begin{enumerate}
+	\item Move the largest item to the end of the array in each iteration by examining the $i$-th and  $(i+1)$-th items
+	\item If their values are not in the correct order, i.e.  $a[i]>a[i+1]$, \textbf{swap} them.
+\end{enumerate}
+Time complexity: $O(n^2)$
+
+\textbf{Improvement} For a sorted input, bubble sort is still $O(n^2)$. This can be improved by using a flag \texttt{isSorted}. Thus for sorted input, time complexity becomes $O(n)$.
+
+\subsection{Insertion sort}
+\begin{enumerate}
+	\item Start with the first element. Insert the next element into its proper sorted order.
+	\item Repeat previous step for the rest of the array.
+\end{enumerate}
+Time complexity: $O(n^2)$. Best case of  $O(n)$ when the array is already sorted.
+
+\subsection{Merge sort}
+Divide-and-conquer:
+\begin{enumerate}
+	\item Divide the array into two (equal) halves.
+	\item Recursively merge sort the two halves.
+	\item Merge the two sorted halves to form a sorted array.
+\end{enumerate}
+Time complexity: $O(n\log n)$
+
+\subsection{Quick sort}
+Also divide-and-conquer:
+\begin{enumerate}
+	\item Choose a \textbf{pivot} item $p$ and partition the array such that items in the first part are  $<p$, and items in the second part are  $\geq p$.
+	\item Recursively sort the 2 parts.
+\end{enumerate}
+Worst case occurs when array is in decreasing order, and time complexity is $O(n^2)$. Best case occurs when the partition always splits the array into \textbf{2 equal halves}, in which case time complexity is $O(n\log n)$. In practice, the worst case  is rare, so average time is $O(n\log n)$ (especially with randomised pivoting).
+
+\subsection{Radix sort}
+\begin{itemize}
+	\item Treats each element to be sorted as a character string.
+	\item \textbf{Non-comparison} based sort
+	\item In each iteration, organise the data into groups according to the \textbf{next} character
+\end{itemize}
+Time complexity: $O(n)$
+
+\subsection{Comparison of sorting algorithms}
+\begin{itemize}
+	\item A sorting algorithm is \textbf{in-place} if it only requires a constant amount of extra space.
+	\item A sorting algorithm is \textbf{stable} if the relative order of elements with the same key value is preserved.
+\end{itemize}
+\begin{center}
+\begin{tabular}{p{1.1cm}|c|c|c|c}
+	& Worst & Best & In-place & Stable\\\hline
+	Selection & $n^2$ &  $n^2$ & Yes & No\\\hline
+	Insertion &  $n^2$ &  $n$ & Yes & Yes\\\hline
+	Bubble &  $n^2$ &  $n^2$ & Yes & Yes\\\hline
+	Improved bubble &  $n^2$ &  $n$ & Yes & Yes\\\hline
+	Merge &  $n\log n$ &  $n\log n$ & No & Yes\\\hline
+	Radix &  $n$ &  $n$ & No & Yes \\\hline
+	Quick &  $n^2$ &  $n\log n$ & Yes & No
+\end{tabular}
+\end{center}
+
+\section{Lists}
+\subsection{Array}
+\textbf{Insertion} at index $i$
+\begin{enumerate}
+	\item Create a gap by shifting the $i$-th to last item rightwards by 1
+	\item Insert the new item in the gap
+	\item If the array is already filled, enlarge it by creating a new array (usually doubling the size of the original array) and copy the original array over. Insert the new item as per normal
+\end{enumerate}
+\textbf{Removal} at index $i$: shift current items from index $i+1$ onwards to the left by $1$
+
+Other operations:
+\begin{itemize}
+	\item \texttt{empty}, \texttt{size()}, \texttt{indexOf(int i)}(if not found return $-1$)
+	\item \texttt{contains(int i)} -- check if \texttt{indexOf(i)} returns  $-1$
+	\item (Retrieval) \texttt{getItemAtIndex(int i)}, \texttt{getFirst()}, \texttt{getLast()} (implement the last two using \texttt{getItemAtIndex}). $O(1)$ time due to array indexing
+	\item (Insertion) \texttt{addAtIndex(int i, int item)} (use \texttt{insert}), \texttt{addFront(int item)}, \texttt{addBack(int item)} (use \texttt{addAtIndex}). Time complexity -- best case: $O(1)$, worst case:  $O(n)$, average case:  $O(n)$ (due to enlargement step)
+	\item (Deletion) \texttt{removeItemAtIndex(int i)} (use \texttt{remove}), \texttt{removeFront()}, \texttt{removeBack()} (use \texttt{removeItemAtIndex}). Time complexity -- best case: $O(1)$, worst case:  $O(n)$, average case:  $O(n)$
+\end{itemize}
+$O(n)$ space complexity (best case is  $n$ and worst case is  $2n$)
+\subsection{Linked List}
+\begin{itemize}
+	\item Each item in the list is stored as a \textbf{node}, which contains a \textbf{next pointer} that points to the node to its right
+	\item The \textbf{head} node indicates the first node.
+\end{itemize}
+\textbf{Accessing}: have a reference that starts from the head, then iterate to move towrads the desired node
+
+\textbf{Insertion} at index $i$
+\begin{enumerate}
+	\item Create a new node \texttt{n}. Access the node \texttt{cur}  at index $i-1$
+	\item Point next reference of \texttt{n} to neighbour of \texttt{cur}. Point next reference of \texttt{cur} to \texttt{n}
+	\item Increment number of nodes
+	\item If inserting at the front, point next of \texttt{n} to the head, then set the head to \texttt{n}
+\end{enumerate}
+\textbf{Removal} at index $i$
+\begin{enumerate}
+	\item Access the node \texttt{cur} at index $i-1$
+	\item Point next reference of \texttt{cur} to the neighbour of the  $i$-th element
+	\item Decrement number of nodes
+	\item If the item to be removed is at the front, point the head to its next reference
+\end{enumerate}
+Other operations:
+\begin{itemize}
+	\item Retrieval -- best case $O(1)$, worst case  $O(n)$, average case  $O(n)$
+	\item Insertion -- best case  $O(1)$, worst case  $O(n)$, average case  $O(n)$
+	\item Deletion -- best case  $O(1)$, worst case  $O(n)$, average case  $O(n)$
+\end{itemize}
+$O(n)$ space complexity
+
+Other variants:
+\begin{itemize}
+	\item Tailed Linked List -- add a tail pointer in addition to head
+	\item Circular Linked List -- add a pointer from the tail node of the tailed linked list to the head node
+	\item Doubly Linked List -- add a previous pointer in addition to next
+\end{itemize}
+\subsection{Array vs Linked List} 
+\begin{itemize}
+	\item Only need to add/remove to front $\to$ LL
+	\item Only need to add/remove to back $\to$ Array
+	\item Need to add/remove anywhere in the list
+		\begin{itemize}
+			\item Equal chance of adding at any index $\to$ no difference between LL or array
+			\item Need to keep adding/removing from a particular index $i\to$ use LL and maintain a reference to the node at index $i-1$
+		\end{itemize}
+	\item Few insertions/deletions but a lot of accesses $\to$ Array
+\end{itemize}
+
+\section{Stack and Queue}
+\subsection{Stack}
+\begin{itemize}
+	\item Last-in-first-out (LIFO)
+	\item Major operations -- \texttt{push}, \texttt{pop}, \texttt{peek}
+	\item Uses -- calling a function, recursion, bracket matching, evaluating arithmetic expressions (postfix calculation), traversing a maze
+	\item Array implementation -- use a top index pointer
+	\item Linked list implementation -- top is the front of the list
+\end{itemize}
+\subsection{Queue}
+\begin{itemize}
+	\item First-in-first-out (FIFO)
+	\item Major operations -- \texttt{poll} (dequeue), \texttt{offer} (enqueue), \texttt{peek}
+	\item Array implementation
+		\begin{enumerate}
+			\item Keep track of front and back indices
+			\item Use a circular array, with $F=(F+1)\%\ maxsize$ and  $B=(B+1)\%\ maxsize$
+			\item Leave a gap to distinguish between full and empty arrays. Full: $(B+1)\%\ maxsize=F$, empty: $F=B$
+		\end{enumerate}
+	\item LL implementation -- use tailed linked list
+\end{itemize}
+
+\section{Hashing}
+\subsection{Map}
+\begin{itemize}
+	\item Map is an ADT containing \texttt{<key, value>} pairs
+	\item Duplicate keys are not allowed
+	\item Basic operations (all $O(1)$ average time) -- retrieval, insertion, deletion
+	\item Mapping of a key to its value is done using a \textbf{hash function}
+\end{itemize}
+\subsection{Direct Addressing Table}
+\begin{itemize}
+	\item Create an array where the index is the key
+	\item Retrieval, insertion, deletion all done by indexing. For deleting, set relevant element to \texttt{null}
+	\item Issues: keys must be nonnegative integers, range of keys must be small, keys must be dense
+\end{itemize}
+\subsection{Hash Table}
+\begin{itemize}
+	\item Generalisation of direct addressing table
+	\item Idea: hash function \texttt{h(key)} maps large integers to smaller ones, non-integer keys to integers
+	\item Instead of indexing by \texttt{a[key]}, use  \texttt{a[h(key)]}
+	\item Problem: collision, i.e. two keys have the same hash value
+\end{itemize}
+\subsection{Hash Functions}
+\begin{itemize}
+	\item Criteria for good hash functions:
+		\begin{itemize}
+			\item \textbf{Consistent} same key maps to same buckets
+			\item \textbf{Fast} to compute
+			\item Distributes keys as \textbf{uniformly} as possible to the buckets. Keys are distributed to buckets with equal probability, and every bucket has some key hashing to it
+		\end{itemize}
+	\item Perfect hash function: one-to-one mapping between keys and hash values. Possible if all keys are known beforehand	
+	\item Picking the hash table size is important. In general, it should be prime
+\end{itemize}
+Examples:
+\begin{itemize}
+	\item Division method -- for a hash table with $m$ slots, use the modulo operator to map an integer to a value between  $0$ and  $m-1$
+	\item Multiplication method -- multiply by a constant real number $0\leq\alpha\leq 1$, extract the fractional part, multiply by $m$, i.e.  $hash(k)=\floor{m(k\alpha-\floor{k\alpha})}$. $\alpha=\frac{1}{\phi}$ is a good choice
+	\item Strings -- sum up ASCII values of all characters and "shift" the sum after each character
+\end{itemize}
+\subsection{Collision Resolution}
+\textbf{Analysis of hash table performance}
+\begin{itemize}
+	\item $n$ -- number of keys in the hash table
+	\item $m$ -- size of the hash table  $-$ number of slots
+	\item $\alpha=\frac{n}{m}$ -- \textbf{load factor}, a measure of how full the hash table is
+\end{itemize}
+\textbf{Criteria}
+\begin{itemize}
+	\item Minimise clustering
+	\item Always find an empty slot if it exists
+	\item Give different probe sequences when 2 initial probes are the same
+	\item Fast
+\end{itemize}
+\textbf{Separate Chaining}
+\begin{itemize}
+	\item Use a linked list to store collided keys
+	\item \texttt{insert(key, data)}: add to the back of the list at \texttt{a[h[key)]}
+	\item $\alpha$ is the average length of the linked lists
+	\item To keep $\alpha$ bounded, we may need to reconstruct the whole table when the load factor exceeds the bound. When the bound is exceeded, we need to rehash all the keys into a bigger table
+\end{itemize}
+\textbf{Linear Probing}
+\begin{itemize}
+	\item Finding and insertion: go to the next empty slot
+	\item Deletion: \textbf{lazy} deletion, use three different states of a slot -- occupied, deleted, empty
+	\item Problems: \textbf{primary clustering} i.e. creating consecutive occupied slots, increasing the run time of the operations
+	\item Modified linear probing: $(\texttt{hash(key)}+k*d)\%m$ where $d$ is a constant integer  $>1$ and coprime to  $m$
+\end{itemize}
+\textbf{Quadratic Probing}
+\begin{itemize}
+	\item Probe sequence: $(\texttt{hash(key)}+k^2)\%m$
+	\item If  $\alpha<0.5$ and  $m$ is prime, then we can always find an empty slot
+	\item Problem: \textbf{secondary clustering} if two keys have the same initial position, their probe sequences are the same
+\end{itemize}
+\textbf{Double Hashing}
+\begin{itemize}
+	\item Use a secondary hash function $\texttt{hash}_2$
+	\item Probe sequence: $(\texttt{hash(key)}+k*\texttt{hash}_2(\texttt{key}))\%m$
+	\item Secondary hash function must not evaluate to $0$ 
+\end{itemize}
+For both separate chaining and open addressing, worst case: $O(n)$, best case:  $O(1)$
+\section{Heap}
+\begin{itemize}
+	\item Motivation: priority queue
+	\item \textbf{Complete} binary tree -- every level except possibly the last is completely filled, and all nodes are as far left as possible
+		\begin{itemize}
+			\item Height --  $O(\log n)$
+			\item \texttt{parent(i) = floor(i/2)} execpt for \texttt{i = 1}
+			\item \texttt{left(i) = 2*i}, no left child when \texttt{left(i) > heapsize}
+			\item \texttt{right(i) = 2*i+1}, no right child when \texttt{right(i) > heapsize}
+		\end{itemize}
+	\item Binary heap property (except root) -- \texttt{A[parent(i)] $\geq$ A[i]} (Max heap)
+	\item Largest element stored at the root
+	\item All are $O(\log n)$
+		\begin{itemize}
+			\item \texttt{Insert} -- use \texttt{ShiftUp}
+			\item \texttt{ExtractMax} -- use \texttt{ShiftDown}
+		\end{itemize}
+	\item \texttt{CreateHeap} -- $O(n)$
+	\item Can do sorting in $O(n\log n)$ time by just calling \texttt{ExtractMax} $n$ times
+\end{itemize}
+\section{UFDS}
+\begin{itemize}
+	\item Collection of disjoint sets with each modelled as a tree
+	\item Each set's representative item is its root
+	\item Forest of trees modelled with an array \texttt{p} where \texttt{p[i]} is the parent of item \texttt{i}
+	\item \texttt{p[i] = i}  $\implies$ \texttt{i} is a root
+	\item \texttt{findset(i)} -- recursively visit \texttt{p[i]} until \texttt{p[i] = i} and compress the path along the way
+	\item \texttt{isSameSet(i, j)} -- check if \texttt{findSet(i) = findSet(j)} 
+	\item \texttt{unionSet(i, j)} -- set representative item of the taller tree as the new representative item of the combined set
+		\begin{itemize}
+			\item "Union-by-rank", helps keep the combined tree shorter
+			\item Use array \texttt{rank} where \texttt{rank[i]} stores the upper bound of height of subtree rooted at \texttt{i} 
+		\end{itemize}
+	\item All operations run in $O(\alpha(N))$ time with union-by-rank and path compression.  $\alpha(N)$ is the inverse Ackermann function
+\end{itemize}
+\section{BST}
+\begin{itemize}
+	\item BST property property -- for all vertices \texttt{x} and \texttt{y}, \texttt{y.key < x.key} if \texttt{y} is in left subtree of \texttt{x}, \texttt{y.key $\geq$ x.key} if \texttt{y} is in right subtree of \texttt{x} 
+	\item \texttt{search}, \texttt{findMin()/findMax()}, \texttt{insert}, \texttt{successor/predecssor}, \texttt{delete} all run in $O(h)$ 
+	\item Inorder traversal -- $O(n)$
+	\item Worst case: $h=O(n)$
+\end{itemize}
+\section{Balanced BST (AVL Tree)}
+\begin{itemize}
+	\item Motivation -- keep $h=O(\log n)$ 
+	\item Height -- number of edges on path from current vertex to deepest leaf, size -- vertices of the subtree rooted at the vertex
+	\item Balance factor -- \texttt{x.left.height - x.right.height}. If absolute value  $\leq 1$, \texttt{x} is height-balanced
+	\item \texttt{bf(x) = +2} and \texttt{0 $\leq$ bf(x.left) $\leq$ 1} -- \texttt{rightRotate(x)}
+	\item \texttt{bf(x) = +2} and \texttt{bf(x.left) = -1} -- \texttt{leftRotate(x.left)} then \texttt{rightRotate(x)}
+	\item \texttt{bf(x) = -2} and \texttt{-1 $\leq$ bf(x.right) $\leq$ 0} -- \texttt{leftRotate(x)}
+	\item \texttt{bf(x) = -2} and \texttt{bf(x.right) = 1} -- \texttt{rightRotate(x.right)} then \texttt{leftRotate(x)}	
+	\item Insertion -- insert as in normal BST, then walk up AVL tree from insertion point to root while checking if any vertex is out of balance. Can only trigger one of the four rebalancing cases once
+	\item Deletion -- delete as in normal BST, similar to insertion but the cases can be triggered more than once
+\end{itemize}
+\section{Graphs}
+\begin{itemize}
+	\item Complete graph -- simple graph with $N$ vertices and  $^NC_2$ edges
+	\item In/out degree of a vertex -- number of in/out edges from a vertex
+	\item Component -- a maximal group of vertices in an undirected graph that can visit each other via some path
+	\item Connected graph -- undirected graph with 1 component
+	\item Tree -- connected graph,  $E=V-1$
+	\item Bipartite graph -- undirected graph where we can partition the vertices into two sets so that there are no edges between members of the same set
+	\item Adjacency matrix -- space complexity $O(V^2)$
+	\item Adjacency List -- space complexity  $O(V+E)$
+	\item Edge list -- space complexity  $O(E)$ ($E=O(V^2)$)
+\end{itemize}
+\section{Graph Traversal}
+
+\end{multicols}
+\end{document}
