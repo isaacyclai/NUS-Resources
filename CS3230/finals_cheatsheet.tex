@@ -1,0 +1,177 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsfonts,latexsym,amsthm,amssymb,amsmath,amscd,euscript}
+\usepackage{enumerate}
+\usepackage{eqparbox}
+\usepackage{framed}
+\usepackage{fullpage}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true,citecolor=blue,urlcolor =black,linkbordercolor={1 0 0}}
+\usepackage{blindtext}
+\usepackage{bm}
+\usepackage{asymptote}
+\usepackage{mathtools}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage[most]{tcolorbox}
+
+\usepackage{minted}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{notation}{Notation}
+\newtheorem*{note}{Note}
+
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+\newcommand{\mb}[1]{\mathbf #1}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\innerproduct}[2]{\left\langle #1, #2 \right\rangle}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\curl}{\text{curl }}
+\newcommand{\dvg}{\text{div }}
+
+\newcommand{\adj}{\text{adj }}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{CS3230 final reference}
+\date{\today}
+\author{Isaac Lai}
+
+\begin{document}
+\maketitle
+\section{Asymptotic facts}
+\begin{align*}
+    e^x&\geq 1+x\\
+    a^{\log_b c}&=c^{\log_b a}\\
+    n!&=\sqrt{2\pi n}\left(\frac{n}{3}\right)^n\left(1+\Theta\left(\frac{1}{n}\right)\right)\text{
+    (Stirling's approximation)}\\
+    \log(n!)&=\Theta(n\log n)\\
+    \sum_{k=0}^n ar^k&= \frac{a(r^{n+1}-1)}{r-1}\text{ (Geometric series)}\\
+    \sum_{k=1}^n \frac{1}{k}&=\ln n+O(1)\text{ (Harmonic series)}\\
+    \lim_{x\to\infty}\frac{f(x)}{g(x)}&=\lim_{x\to\infty}\frac{f'(x)}{g'(x)}\text{ (L'Hopital's Rule)}\\
+\end{align*}
+\section{Asymptotic analysis}
+\begin{itemize}
+    \item $f(n)=O(g(n))$ if  $\exists c>0,n_0>0$ such that $\forall n\geq n_0, 0\leq f(n)\leq cg(n)$
+    \item  $f(n)=\Omega(g(n))$ if  $\exists c>0,n_0>0$ such that $\forall n\geq n_0, 0\leq cg(n)\leq f(n)$
+    \item  $f(n)=\Theta(g(n))$ if $\exists c_1,c_2>0,n_0>0$ such that $\forall n\geq n_0, 0\leq c_1g(n)\leq
+        f(n)\leq c_2g(n)$ i.e. $\Theta(g)=O(g)\cap\Omega(g)$ 
+    \item $\lim\limits_{n\to\infty}\frac{f(n)}{g(n)}=0\implies f(n)=o(g(n))$ 
+    \item $\lim\limits_{n\to\infty}\frac{f(n)}{g(n)}<\infty\implies f(n)=O(g(n))$    
+    \item $0<\lim\limits_{n\to\infty}\frac{f(n)}{g(n)}<\infty\implies f(n)=\Theta(g(n))$
+    \item $\lim\limits_{n\to\infty}\frac{f(n)}{g(n)}>0\implies f(n)=\Omega(g(n))$  
+    \item $\lim\limits_{n\to\infty}\frac{f(n)}{g(n)}=\infty\implies f(n)=\omega(g(n))$   
+\end{itemize}
+\section{Recurrences}
+General form: $T(n)=aT(\frac{n}{b})+f(n)$
+\begin{itemize}
+    \item Telescoping: express in form $\frac{T(n)}{g(n)}=\frac{T(\frac{n}{b})}{g(\frac{n}{b})}+h(n)$ 
+    \item Recursion tree: draw tree, sum each node (can sum over level first then over height)
+    \item \textbf{Master Theorem}: $a\geq 1,b>1,f$ asymptotically positive
+        \begin{enumerate}
+            \item $f(n)=O(n^{\log_b a-\epsilon})$ for some  $\epsilon>0$.  $T(n)=\Theta(n^{\log_b a})$
+            \item  $f(n)=\Theta(n^{\log_b a}\log^k n)$ for some  $k\geq 0$.  $T(n)=\Theta(n^{\log_b
+                a}\log^{k+1}n)$
+            \item  $f(n)=\Omega(n^{\log_b a+\epsilon})$ for some  $\epsilon>0$ and satisfies
+                \textbf{regularity condition}  $af(\frac{n}{b})\leq cf(n)$ for some $c<1$.
+                $T(n)=\Theta(f(n))$
+        \end{enumerate}
+    \item Substitution: guess and check by induction. Induction hypothesis: $c_1n^k-\text{(lower order
+        terms)}$
+\end{itemize}
+\section{Divide and Conquer}
+Invariant: condition which is true at the start of every iteration. To show correctness check
+\begin{itemize}
+    \item Initialisation: invariant is true at iteration 1
+    \item Maintenance: if invariant is true for iteration $n$, it remains true for iteration $n+1$ 
+    \item Termination: when the algorithm ends, the invariant helps the proof of correctness
+\end{itemize}
+Strassen's algorithm: matrix multiplication in $O(n^{\log_2 7})$ (splitting into 7 multiplications instead
+of 8)
+
+\section{Sorting}
+Lower bound for \textbf{comparison-based} sort is $O(n\log n)$ by argument from decision tree
+\begin{center}
+    \begin{tabular}{l|c|c}
+        No. of comparisons & Mergesort & Quicksort\\
+        \hline
+        Average case & $\Theta(n\log_2 n)$ & $\Theta(n\log_2n)$\\
+        Best case & $\Theta(n\log_2n)$ & $\Theta(n\log_2n)$\\
+        Worst case & $\Theta(n\log_2n)$ & $\Theta(n^2)$
+    \end{tabular}
+\end{center}
+
+\section{Randomisation}
+\begin{itemize}
+    \item Las Vegas algorithms: (1) output always correct (2) running time depends on random bits, with
+        small probability that it may be large (3) expected running time is bounded by given time-bound
+        function
+    \item Monte Carlo algorithms: (1) answer may be incorrect with small probability (2) running time is always bounded by given time-bound function
+    \item Union bound: $P(A\cup B)\leq P(A)+P(B)$
+    \item Linearity of expectation:  $E[X+Y]=E[X]+E[Y]$ even if  $X$ and  $Y$ are not independent random
+        variables
+\end{itemize}
+\section{Dynamic Programming}
+\begin{itemize}
+    \item Optimal substructure: optimal solution contains optimal solutions to subproblems
+    \item Overlapping subproblems: recursive solution contains a small number of distinct subproblems
+        repeated many times
+    \item Top-down saves computation of unnecessary subproblems but can suffer from
+        overhead of recursive calls, bottom-up is the opposite
+\end{itemize}
+
+\section{Greedy}
+\begin{itemize}
+    \item Greedy choice: pick the largest/smallest/etc. (some extreme value). Show there is always an
+        optimal solution to the original problem that makes the greedy choice
+    \item Use optimal substructure to show we can combine an optimal solution to the subproblem with the
+        greedy choice to get an optimal solution to the original problem
+\end{itemize}
+
+\section{Amortised analysis}
+\begin{itemize}
+    \item Shows that the average cost per operation is small, even though a single operation within the
+        sequence might be expensive
+    \item Accounting method: charge $i$th operation an amortised cost  $c(i)$. Must ensure the sum of true
+        costs  $\sum_{i=1}^nt(i)\leq\sum_{i=1}^nc(i)$ 
+    \item Potential method: $\phi(0)=0$,  $\phi(i)\geq 0$ for all  $i$. Amortised cost of  $i$th operation
+        $=t(i)+(\phi(i)-\phi(i-1))$. Heuristic: try to find some quantity that is "decreasing" during the
+        operation
+\end{itemize}
+
+\section{Reductions and NP-completeness}
+\begin{itemize}
+    \item Poly-time: polynomial in terms of the length of the encoding of the problem instance
+    \item Pseudo-polynomial: polynomial in numeric value of the input, but not necessarily in length of the
+        input
+    \item $A\leq_p B$: $A$ is poly-time reducible to  $B$. So if  $B$ has a poly-time algorithm, so does
+        $A$. Conversely, $A$ can be seen as a special case of  $B$, so if  $A$ is hard, then  $B$ is hard
+        too
+    \item Decision reduces to optimisation (given value of optimal solution, simply check if it is  $\leq
+        k$)
+    \item NP-complete: problem must be both in NP and NP-hard
+    \item NP-complete problems: Circuit SAT, CNF-SAT, 3-SAT,
+        MAX-2-SAT, Vertex Cover, Independent Set, Max-Clique,
+        (Directed/Undirected) Hamiltonian Cycle,
+        Travelling Salesperson, Parition, Subset Sum, 0-1 Knapsack
+\end{itemize}
+
+\section{Order statistics}
+\begin{itemize}
+    \item Worst case linear time algorithm to select the rank-$i$ element
+\end{itemize}
+\end{document}
