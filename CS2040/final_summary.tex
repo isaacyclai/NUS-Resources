@@ -1,0 +1,169 @@
+\documentclass[frenchspacing,12pt,a4paper]{article}
+
+\usepackage{amsfonts,latexsym,amsthm,amssymb,amsmath,amscd,euscript}
+\usepackage{enumerate}
+\usepackage{eqparbox}
+\usepackage{framed}
+\usepackage{fullpage}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true,citecolor=blue,urlcolor =black,linkbordercolor={1 0 0}}
+\usepackage{blindtext}
+\usepackage{bm}
+\usepackage{asymptote}
+\usepackage{mathtools}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage[most]{tcolorbox}
+
+\usepackage{minted}
+
+\usepackage{graphicx}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{notation}{Notation}
+\newtheorem*{note}{Note}
+
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+\newcommand{\mb}[1]{\mathbf #1}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\innerproduct}[2]{\left\langle #1, #2 \right\rangle}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\curl}{\text{curl }}
+\newcommand{\dvg}{\text{div }}
+
+\newcommand{\adj}{\text{adj }}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{CS2040 final summary\\
+\large AY 22/23 S1}
+\date{\today}
+\author{Isaac Lai}
+
+\begin{document}
+\maketitle
+
+\section{Heaps}
+\begin{center}
+	\begin{tabular}{c|c}
+		\textbf{Operation} & \textbf{Time}\\
+		\hline
+		Insert & $O(\log n)$\\\hline
+		ExtractMax & $O(\log n)$\\\hline
+		Update &  $O(\log n)$\\\hline
+		Delete &  $O(\log n)$\\\hline
+		Create &  $O(n)$ 
+	\end{tabular}
+\end{center}
+\begin{itemize}
+	\item ShiftUp/ShiftDown both $O(\log n)$. \textbf{Only heap creation using ShiftDown} is  $O(n)$. Using ShiftUp is  $O(n\log n)$
+	\item Heap sort runs in $O(n\log n)$ 
+	\item Partial sort of $k$ elements runs in $O(k\log n)$
+	\item Select  $k$th smallest/largest element (from any key) runs in $O(k\log n)$ 
+\end{itemize}
+
+\section{UFDS}
+\begin{center}
+	\begin{tabular}{c|c}
+		\textbf{Operation} & \textbf{Time}\\\hline
+		Initialise & $O(n)$\\\hline
+		UnionSet &  $O(\alpha(n))$\\\hline
+		FindSet &  $O(\alpha(n))$\\\hline
+		IsSameSet &  $O(\alpha(n))$
+	\end{tabular}
+\end{center}
+\begin{itemize}
+	\item Above time complexities hold only when both union by rank and path compression are used. If only union by rank, time complexities of $O(\alpha(n))$ become  $O(\log n)$. If neither, $O(n)$
+	\item Rank is only an \textbf{upper bound} on the height of the subtree, not the actual height
+\end{itemize}
+
+\section{BST and bBST/AVL Tree}
+\begin{center}
+	\begin{tabular}{c|c}
+		\textbf{Operation} & \textbf{Time}\\
+		\hline
+		Insert & $O(\log n)$\\\hline
+		Search & $O(\log n)$\\\hline
+		Delete &  $O(\log n)$\\\hline
+		FindMax/FindMin &  $O(\log n)$\\\hline
+		Predecssor/Succesor &  $O(\log n)$\\\hline
+		Traversal & $O(n)$ \\\hline
+		Floor & $O(\log n)$\\\hline
+		Ceiling &  $O(\log n)$\\\hline
+		Rank &  $O(\log n)$ \\\hline
+		Select &  $O(\log n)$
+	\end{tabular}
+\end{center}
+\begin{itemize}
+	\item For unbalanced BST, operations are $O(n)$ instead of  $O(\log n)$ due to edge case when all elements are inserted in ascending/descending order to form one long chain
+	\item All BST operations are dependent on $h$ except traversal. For bBST, $h=O(\log n)$
+	\item AVL tree requires additional attributes \texttt{height} and \texttt{size}
+	\item Insertion in AVL tree can only trigger a rebalancing case once. Deletion can trigger up to $h$ times
+	\item Traversal visitation order: pre-order (current, left, right), in-order (left, current, right), post-order (left, right, current)
+\end{itemize}
+
+\section{Graphs}
+\subsection{Traversal}
+\begin{itemize}
+	\item BFS and DFS both $O(V+E)$
+	\item BFS and DFS form a spanning tree
+	\item Counting/labelling components -- $O(V+E)$
+	\item Check if bipartite -- run BFS/DFS and use two colours to colour alternating vertices. No two adjacent vertices have the same colour $\implies$ bipartite
+	\item Topological Sort -- DFS or Kahn's Algorithm $O(V+E)$
+	\item Counting SCCs -- Kosaraju's Algorithm: toposort, reverse edges, DFS and count $O(V+E)$
+	\item Cycle detection -- DFS $O(V+E)$
+\end{itemize}
+\subsection{MST}
+\begin{itemize}
+	\item General case -- Prim's or Kruskal's $O(E\log V)$
+	\item Dense graph -- Prim's variant (iterate through neighbours instead of using PQ) $O(V^2)$
+	\item Use for Minimax/Maximin problems
+	\item \textbf{Cycle property} -- in any cycle, the weight of the largest edge cannot be included in the MST
+	\item \textbf{Cut property} -- for any cut, if the weight of an edge in the cut set is strictly smaller than the weights of all other edges in the cut set, the edge belongs to all MSTs
+\end{itemize}
+\subsection{SSSP}
+\begin{itemize}
+	\item One-pass Bellman-Ford -- toposort then relax in topological order. $O(V+E)$ since toposort dominates the relaxation
+	\item For modified Dijkstra, if  $E<O(V)$,  $O(E\log E)<O((V+E)\log V)=O(V\log V)$, so time complexity is  $O(E\log E)$ instead of  $O((V+E)\log V)$
+\end{itemize}
+\begin{center}
+\includegraphics[scale=0.35]{SSSP1.png}	
+\end{center}
+\subsection{APSP}
+\begin{itemize}
+	\item Dense graph -- Floyd Warshall $O(V^3)$
+	\item Sparse graph -- can try running the two inner loops of Floyd Warshall on fewer vertices
+	\item Solves transitive closure (reachability of vertex $i$ from vertex $j$, maximin/minimax from  $i$ to  $j$), cycle checking (if diagonal element $\neq\infty$)
+\end{itemize}
+\section{Miscellaneous hacks}
+\begin{itemize}
+	\item For time complexities of graph algos, check if simplification can be done by expressing $E$ in terms of  $V$
+	\item Check if any bounds make the time complexity constant (21/22 S2 $O(1)$ Floyd-Warshall!)
+	\item Check if DSes in standard algos can be replaced e.g. using constant number of queues instead of PQ in MST (21/22 S2 Q16), using iteration of neighbours
+	\item To keep track of relationships between variables, use pairs, triples, or hashmap(s)
+	\item MST -- radix sort can be used in Kruskal (21/22 S2 Q16)
+	\item Multi-source MST (T9 Q6)
+	\item Run Dijkstra from both source (A) and destination (B) to get distance arrays $D_A$ and  $D_B$, then modify shortest path with some edge having weight $w(u,v)$ by taking $D_A[u]+w(u,v)+D_B[v]$ (2040S 22/23 S1 Q19)
+	\item Split vertices/edges into multiple vertices/edges
+	\item \textbf{State-space graph} -- if vertex has to be entered from multiple states (e.g. finite path length required so need to keep track of total path length), split into one vertex for each state (21/22 S2 Q19, 20/21 S2Q19)
+	\item Logarithms -- if path length is a product, convert all weights to $\log$ and do normal SSSP (T10 Q3)
+	\item Special graphs -- ``Linked list", star graph, all nodes in a cycle, disconnected graph, single node, tree, two nodes with bidrectional edge between
+	\item Replace predecssor array in Dijkstra with array of lists to form an adjacency list of the shortest paths spanning tree (2040S 22/23 S1 Q19, 20/21 S2 Q19)
+	\item Create/merge vertices/edges to impose additional constraints (T9 Q6 create new vertex with weight 0 edges to link multiple vertices together)
+	\item In general, adding/multiplying constants to the weights of edges does not produce the same shortest-path/MST/etc. Must check conditions given. Specific cases: multiplying all weights by positive constant gives same SSSP
+\end{itemize}
+\end{document}
