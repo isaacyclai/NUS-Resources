@@ -8,6 +8,7 @@ A collection of resources (mostly cheatsheets) for NUS courses.
 
 **AY23/24 S1**
 - CS2040 Data Structures and Algorithms
+- ST3131 Regression Analysis
 
 **AY23/24 S2**
 - CS3230 Design and Analysis of Algorithms
