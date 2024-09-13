@@ -1,0 +1,278 @@
+\documentclass[frenchspacing,9pt,landscape,a4paper]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage[linewidth=1pt]{mdframed}
+\usepackage{enumitem}
+\usepackage{times} % Times New Roman font to fit more content
+
+% Even more efficient font
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+
+\setlist[itemize]{align=parleft,left=0pt..1em}
+\setlist[enumerate]{align=parleft,left=0pt..1em}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=0.8cm,left=0.8cm,right=0.8cm,bottom=0.8cm} }
+		{\geometry{top=0.8cm,left=0.8cm,right=0.8cm,bottom=0.8cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+\setlength{\columnseprule}{0.1pt}
+
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+\newcommand{\mb}[1]{\mathbf #1}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\innerproduct}[2]{\left\langle #1, #2 \right\rangle}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\curl}{\text{curl }}
+\newcommand{\dvg}{\text{div }}
+
+\newcommand{\adj}{\text{adj }}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\pr}{Pr}
+\DeclareMathOperator{\var}{Var}
+
+% -----------------------------------------------------------------------
+\newtheorem*{thm}{Theorem}
+\newtheorem*{defn}{Definition}
+\title{MA4261 cheatsheet}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{4} % can work with 4 too
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+\begin{mdframed}
+\begin{center}
+    \large{\textbf{MA4261 Information and Coding Theory}} \\
+    \normalsize{\textbf{AY24/25 Semester 1}}\\
+    \small{by Isaac Lai}
+\end{center}	
+\end{mdframed}
+
+\section{Probability}
+\begin{itemize}
+    \item $\var(X)=\mathbb{E}[(X-\mathbb{E}[X])^2]=\mathbb{E}[X^2]-\mathbb{E}[X]^2$
+    \item \textbf{Union bound:} In a probability space with $\sigma$-algebra  $\mathcal{F}$ we have
+        \[\pr\left(\bigcup_{i=1}^k A_i\right)\leq\sum_{i=1}^k\pr(A_i)\] This holds in the infinite case
+        too.
+    \item $\mathbb{E}[X]=\mathbb{E}_Y[\mathbb{E}_X[X\mid Y]]$
+    \item Random variables $X,Y,Z$ form a \textbf{Markov chain} in the order  $X-Y-Z$ if their joint
+        distribution $P_{XYZ}$ satisfies for all  $(x,y,z)\in\mathcal{X}\times\mathcal{Y}\times\mathcal{Z}$
+        \[P_{XYZ}(x,y,z)=P_X(x)P_{Y\mid X}(y\mid x)P_{Z\mid Y}(z\mid y)\]
+        This is equivalent to saying $X$ and  $Z$ are \textbf{conditionally independent given $Y$}.
+    \item \textbf{Markov's Inequality:} Let $X$ be a real-valued non-negative random variable. Then for any
+        $a>0$ we have  $\pr(X>a)\leq \frac{\mathbb{E}[X]}{a}$.
+    \item \textbf{Chebyshev's Inequality:} Let $X$ be a real-valued random variable with mean  $\mu$ and
+        variance  $\sigma^2$. Then for any $a>0$
+        \[\pr(\abs{X-\mu}>a\sigma)\leq \frac{1}{a^2}\]
+    \item \textbf{Weak Law of Large Numbers:} For every $\epsilon>0$,
+        \[\lim_{n\to\infty}\pr\left(\abs{\frac{1}{n}\sum_{i=1}^n X_i}>\epsilon\right)=0\]
+%    \item \textbf{Convexity:} A function $f(x)$ is convex if for all  $x,y$ and  $\lambda\in[0,1]$,
+%        $f(\lambda x+(1-\lambda)y)\leq\lambda f(x)+(1-\lambda)f(y)$
+\end{itemize}
+\section{Information Quantities}
+\begin{defn}
+    The \textbf{entropy} $H(X)$ of a discrete random variable  $X$ is defined by
+    \[H(X)=-\sum_{x\in\mathcal{X}}p(x)\log p(x)\]
+\end{defn}
+\subsection{Properties of $H$}
+\begin{enumerate}
+    \item $H(X)\geq 0$
+    \item  $H_b(X)=(\log_ba)H_a(X)$ (binary entropy)
+    \item (Conditioning does not increase entropy) For any two random variables  $X$ and  $Y$,  $H(X\mid
+        Y)\leq H(X)$ with equality iff  $X$ and  $Y$ are independent.
+    \item $H(X_1,X_2,\dots,X_n)\leq\sum_{i=1}^n H(X_i)$ with equality iff all $X_i$ are independent.
+    \item  $H(X)\leq\log\abs{\mathcal{X}}$ with equality iff  $X$ is distributed uniformly over
+        $\mathcal{X}$.
+    \item  $H(p)$ is concave in  $p$.
+    \item \textbf{Han's Inequality:}
+        \[H(X_1,\dots,X_n)\leq \frac{1}{n-1}\sum_{i=1}^n H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n)\]
+\end{enumerate}
+\begin{defn}
+    The \textbf{relative entropy} $D(p\parallel q)$ of pmf $p$ wrt pmf $q$ is
+    \[D(p\parallel q)=\sum_x p(x)\log  \frac{p(x)}{q(x)}\]
+\end{defn}
+\begin{defn}
+    The \textbf{mutual information} between two random variables $X$ and  $Y$ is defined as
+    \[I(X;Y)=\sum_{x\in\mathcal{X}}\sum_{y\in\mathcal{Y}}p(x,y)\log \frac{p(x,y)}{p(x)p(y)}\]
+\end{defn} Alternatively,
+\begin{align*}
+    H(X)&=E_p\log \frac{1}{p(X)}\\
+    H(X,Y)&=E_p\log \frac{1}{p(X,Y)}\\
+    H(X\mid Y)&=E_p\log \frac{1}{p(X\mid Y)}\\
+    I(X;Y)&=E_p\log \frac{p(X,Y)}{p(X)p(Y)}\\
+    D(p\parallel q)&=E_p\log \frac{p(X)}{q(X)}
+\end{align*}
+\subsection{Properties of $D$ and  $I$}
+\begin{enumerate}
+    \item $I(X;Y)=H(X)-H(X\mid Y)=H(Y)-H(Y\mid X)=H(X)+H(Y)-H(X,Y)$
+    \item  $D(p\parallel q)\geq 0$ with equality iff  $p(x)=q(x)$ for all  $x\in\mathcal{X}$
+    \item  $I(X;Y)=D(p(x,y)\parallel p(x)p(y))\geq 0$ with equality iff  $p(x,y)=p(x)p(y)$, i.e.  $X$ and
+         $Y$ are independent. 
+     \item If $\abs{\mathcal{X}}=m$ and  $u$ is the uniform distribution over  $\mathcal{X}$, then
+         $D(p\parallel q)=\log m-H(p)$.
+     \item  $D(p\parallel q)$ is convex in the pair  $(p,q)$.
+\end{enumerate}
+\subsection{Chain rules}
+\begin{itemize}
+    \item Entropy: $H(X_1,X_2,\dots,X_n)=\sum_{i=1}^n H(X_i\mid X_{i-1},\dots, X_1)$
+    \item Mutual information: $I(X_1,X_2,\dots, X_n;Y)=\sum_{i=1}^n I(X_i;Y\mid X_1,X_2,\dots,X_{i-1})$
+    \item Relative entropy: $D(p(x,y)\parallel q(x,y))=D(p(x)\parallel q(x))+D(p(y\mid x)\parallel q(y\mid
+        x))$
+\end{itemize}
+\subsection{Important results}
+\begin{itemize}
+    \item \textbf{Jensen's Inequality:} If $f$ is a convex function, then  $\mathbb{E}f(X)\geq
+        f(\mathbb{E}X)$ 
+    \item \textbf{Log sum Inequality:} For $n$ positive numbers,  $a_1,a_2,\dots,a_n$ and
+        $b_1,b_2,\dots,b_n$
+        \[\sum_{i=1}^n a_i\log \frac{a_i}{b_i}\geq\left(\sum_{i=1}^n a_i\right)\log
+        \frac{\sum_{i=1}^na_i}{\sum_{i=1}^n b_i}\] with equality iff $\frac{a_i}{b_i}=$ constant.
+    \item \textbf{Data-processing Inequality:} If $X\to Y\to Z$ forms a Markov chain,  $I(X;Y)\geq I(X;Z)$.
+    \item \textbf{Sufficient statistic:}  $T(X)$ is sufficient relative to  $\{f_\theta(x)\}$ iff
+        $I(\theta;X)=I(\theta;T(X))$ for all distributions on  $\theta$.
+    \item \textbf{Fano's Inequality:} Let $P_e=\pr\{\hat{X}(Y)\neq X\}$. Then
+        \[H(P_e)+P_e\log\abs{\mathcal{X}}\geq H(X\mid Y)\] This can be loosened to
+        \[P_e\geq \frac{H(X\mid Y)-1}{\log\abs{\mathcal{X}}}\]
+    \item If $X$ and  $X'$ are i.i.d., then  $\pr(X=X')\geq 2^{-H(X)}$
+\end{itemize}
+\section{Asymptotic Equipartition Property}
+\begin{defn}
+    The \textbf{typical set} of $X$, a discrete memoryless source (DMS) is defined as 
+    \[A_\epsilon^{(n)}(X):=\left\{x^n\in\mathcal{X}^n:\abs{\frac{1}{n}\log
+    \frac{1}{P_{X^n}(x^n)}-H(X)}\leq\epsilon\right\}\] where for all $x^n\in\mathcal{X}^n$
+    \[P_{X^n}(x^n)=\pr(X^n=x^n)=\prod_{i=1}^n P_X(x_i)\]
+\end{defn}
+\begin{thm}[AEP]
+    \begin{enumerate}
+        \item $\pr(X^n\in A_\epsilon^{(n)}(X))\leq 1-\epsilon$ for all sufficiently large  $n$.
+        \item The size of the typical set satisfies
+            $(1-\epsilon)2^{n(H(X)-\epsilon)}\leq\abs{A_\epsilon^{(n)}(X)}\leq 2^{n(H(X)+\epsilon)}$.
+    \end{enumerate}
+\end{thm}
+\begin{defn}[Code]
+    An $(n,2^{nR})$-fixed-to-fixed-length source code consists of an encoder  $f$ and a decoder  $\varphi$
+    where
+    \begin{enumerate}
+        \item $f:\mathcal{X}^n\to\{1,\dots,2^{nR}\}$ and
+        \item  $\varphi:\{1,\dots,2^{nR}\}\to\mathcal{X}^n$
+    \end{enumerate} $n$ is the blocklength of the code and  $R$ is the rate of the code.
+\end{defn}
+\begin{defn}[Achievable rate]
+    $R\geq 0$ is achievable if there exists a sequence of  $(n,2^{nR})$-codes such that
+    $\lim_{n\to\infty}\pr(\hat{X}^n\neq X^n)=0$ where  $\hat{X}^n=\varphi(M)$ and  $M=f(X^n)$ are the
+    reconstructed source and compression index respectively.
+\end{defn}
+\begin{defn}[Optimum Source Coding Rate]
+    The optimum source coding rate for the DMS $X$ is $R^*(X)=\inf\{R:R\text{ is achievable}\}$.
+\end{defn}
+\begin{thm}[Fixed-to-Fixed-Length Data Compression]
+    \begin{align*}
+        R^*(X)=H(X) 
+    \end{align*}
+\end{thm}
+\begin{thm}
+    If $R<H(X)$, then  $P_e^{(n)}:=\pr(\hat{X}^n\neq X^n)\to 1$ as  $n\to\infty$.
+\end{thm}
+\begin{thm}[Han-Verdu Lemma]
+    Fix any $(n,2^{nR})$-code. Then  $P_e=\pr(\hat{X}^n\neq X^n)$ satisfies
+    \[P_e\geq\sup_{\gamma>0}\pr\left\{\frac{1}{n}\log \frac{1}{P_{X^n}(X^n)}\geq
+    R+\gamma\right\}-e^{-n\gamma}\]
+\end{thm}
+\begin{thm}
+    Let $B_\delta^{(n)}\subset\mathcal{X}^n$ be such that if  $X_1,X_2,\dots\sim P_X$, then for every
+    $\delta\in(0,1)$,  $\pr(X^n\in B_\delta^{(n)})\geq 1-\delta$ for all  $n$ sufficiently large. Then for
+    any $\delta'>0$,
+    \[\frac{1}{n}\log\abs{B_\delta^{(n)}}\geq H(X)-\delta'\] for $n$ sufficiently large. Here  $H(X)$ is
+    computed wrt PMF  $P_X$
+\end{thm}
+\section{Entropy Rates of Stochastic Processes}
+A \textbf{stochastic process} $\{x_i\}_{i\in\BN}$ is an indexed sequence of random variables where  $i$ is
+the time.
+\begin{defn}
+    A stochastic process is \textbf{stationary} if
+    $\pr(X_1=x_1,\dots,X_n=x_n)=\pr(X_{1+\ell}=x_1,\dots,X_{n+\ell}=x_n)$ for all $n\in\BN$ and every shift
+    $\ell\in\BN$, and for all $x_1,\dots,x_n\in\mathcal{X}$
+\end{defn}
+\begin{defn}
+    A stochastic process is a \textbf{Markov chain} if $\forall n\geq 1$,  $\pr(X_{n+1}=x_{n+1}\mid
+    X_1=x_1,\dots,X_n=x_n)=\pr(X_{n+1}=x_{n+1}\mid X_n=x_n)$ $\forall x_1,\dots,x_{n+1}\in\mathcal{X}$
+\end{defn}
+\begin{defn}
+    The Markov chain is \textbf{time-invariant} if $P(x_{n+1}\mid x_n)$ does not depend on  $n$. Such a
+    Markov chain is charactersied by a transition probability matrix (TPM)  $P=[P_{ij}]$,
+    $i,j\in\mathcal{X}$,  $P_{ij}=\pr(X_{n+1}=j\mid X_n=i)$ for all time-invariant  $n$. In other words, we
+    have  $p_{n+1}=p_nP$
+\end{defn}
+If it is possible to go from any state to any other in a finite number of steps, the Markov chain is
+\textbf{irreducible}. If the GCD of the lengths of different paths from a state to itself is 1, the Markov
+chain is \textbf{aperiodic}.
+\begin{defn}[Entropy rate]
+    Two definitions:
+    \begin{align*}
+        H(X)&=\lim_{n\to\infty}\frac{1}{n}H(X_1,X_2,\dots,X_n)\\
+        H'(X)&=\lim_{n\to\infty}H(X_n\mid X_{n-1},X_{n-2},\dots,X_1)
+    \end{align*} For a stationary stochastic process, $H(\mathcal{X})=H'(\mathcal{X})$
+\end{defn}
+\begin{thm}[Cesaro mean]
+    If $a_n\to a$ and  $b_n=\frac{1}{n}\sum_{i=1}^n a_i$, then $b_n\to a$.
+\end{thm}
+\begin{thm}[Shannon-McMillan-Breiman]
+    For a stationary, ergodic (irreducible and aperiodic) process, the AEP holds: $\lim_{n\to\infty}-\frac{1}{n}\log
+    p(X_1,\dots,X_n)=H(X)$
+\end{thm}
+\begin{itemize}
+    \item \textbf{Entropy rate of an ergodic Markov chain:} $H(X)=H'(X)=H(X_2\mid X_1)$ 
+    \item \textbf{Functions of a Markov chain:} If  $X_1,X_2,\dots,X_n$ form a stationary Markov chain and
+        $Y_i=\phi(X_i)$, then
+        \begin{align*}
+            H(Y_n\mid Y^{n-1},X_1)&\leq H(Y)\leq H(Y_n\mid Y^{n-1})\\
+            \lim_{n\to\infty}H(Y_n\mid Y^{n-1},X_1)&=H(Y)=\lim_{n\to\infty}H(Y_n\mid Y^{n-1})\\
+        \end{align*}
+\end{itemize}
+\end{multicols}
+\end{document}
