@@ -12,3 +12,6 @@ A collection of resources (mostly cheatsheets) for NUS courses.
 
 **AY23/24 S2**
 - CS3230 Design and Analysis of Algorithms
+
+**AY24/25 S1**
+- MA4261 Information and Coding Theory
