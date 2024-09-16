@@ -1,0 +1,252 @@
+\documentclass[frenchspacing,9pt,landscape,a4paper]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage[linewidth=1pt]{mdframed}
+\usepackage{enumitem}
+\usepackage{times} % Times New Roman font to fit more content
+
+% Even more efficient font
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+
+\setlist[itemize]{align=parleft,left=0pt..1em}
+\setlist[enumerate]{align=parleft,left=0pt..1em}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=0.8cm,left=0.8cm,right=0.8cm,bottom=0.8cm} }
+		{\geometry{top=0.8cm,left=0.8cm,right=0.8cm,bottom=0.8cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+\setlength{\columnseprule}{0.1pt}
+
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+\newcommand{\mb}[1]{\mathbf #1}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\innerproduct}[2]{\left\langle #1, #2 \right\rangle}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\curl}{\text{curl }}
+\newcommand{\dvg}{\text{div }}
+
+\newcommand{\adj}{\text{adj }}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\pr}{Pr}
+\DeclareMathOperator{\var}{Var}
+
+% -----------------------------------------------------------------------
+\newtheorem*{thm}{Theorem}
+\newtheorem*{defn}{Definition}
+\title{MA4261 cheatsheet}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{5} % can work with 4 too
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+\begin{mdframed}
+\begin{center}
+    \large{\textbf{CS3231 Theory of Computation}} \\
+    \normalsize{\textbf{AY24/25 Semester 1}}\\
+    \small{by Isaac Lai}
+\end{center}	
+\end{mdframed}
+\section{Finite Automata}
+\subsection{DFAs}
+\begin{defn}
+    A DFA is a 5-tuple $(Q,\Sigma,\delta,q_0,F)$ where
+    \begin{itemize}
+        \item $Q$ is a finite set of states
+        \item $\Sigma$ is a finite set of input symbols
+        \item  $\delta(q,w)$ is a transition function that takes as input  $q\in Q$ and  $w\in\Sigma$
+        \item  $q_0\in Q$ is a starting state
+        \item $F\subseteq Q$ is the set of accepting states
+    \end{itemize}
+\end{defn}
+\subsubsection{Properties}
+\begin{itemize}
+    \item We can extend $\delta$ as  $\hat{\delta}$ which accepts strings. Basis:
+        $\hat{\delta}(q,\epsilon)=q$, Induction:  $\hat{\delta}(q,xa)=\delta(\hat{\delta}(q,x),a)$ 
+    \item The \textbf{language} accepted by DFA $A$ is  $L(A)=\{w\mid\hat{\delta}(q_0,w)\in F\}$
+    \item $q$ is a \textbf{dead state} if  $\forall w\in\Sigma^*$,  $\hat{\delta}(q,w)\notin F$, i.e. an
+        accepting state cannot be reached from $q$
+    \item  $q$ is an \textbf{unreachable state} if  $\forall w\in\Sigma^*$,  $\hat{\delta}(q_0,w)\neq q$,
+        i.e. $q$ cannot be reached from the starting state
+\end{itemize}
+\subsection{NFAs}
+\begin{defn}
+    An NFA is a 5-tuple $(Q,\Sigma,\delta,q_0,F)$ defined similarly to a DFA except $\delta$ maps the input
+    (state, symbol) to a set of states (i.e. a subset of $Q$)
+\end{defn}
+\subsubsection{Properties}
+\begin{itemize}
+    \item We can extend $\delta$ as  $\hat{\delta}$ which accepts strings. Basis:
+        $\hat{\delta}(q,\epsilon)=\{q\}$, Induction:
+        $\hat{\delta}(q,xa)=\bigcup_{p\in\hat{\delta}(q,x)}\delta(p,a)$
+    \item The \textbf{language} accepted by an NFA is $L(A)=\{w\mid\hat{\delta}(q_0,w)\cap F\neq\emptyset\}$
+    \item \textbf{NFA with $\epsilon$-transitions}: $\delta$ maps  $Q\times(\Sigma\cup\{\epsilon\})$ to
+        subsets of $Q$
+\end{itemize}
+\begin{defn}[$\epsilon$ closures]
+    \begin{enumerate}
+        \item $q\in Eclose(q)$
+        \item If state  $p\in Eclose(q)$, then each state in  $\delta(p,\epsilon)$ is in  $Eclose(q)$
+        \item Iterate step 2, until no more changes can be done to  $Eclose(q)$
+    \end{enumerate}
+\end{defn}
+\begin{itemize}
+    \item For $\epsilon$-NFA, we can extend  $\delta$ to  $\hat{\delta}$ where
+        $\hat{\delta}(q,\epsilon)=Eclose(q)$ and  $\hat{\delta}(q,wa)=\bigcup_{p\in R}Eclose(p)$ 
+\end{itemize}
+\subsection{Equivalence}
+\begin{itemize}
+    \item NFAs (and  $\epsilon$-NFAs) and DFAs are \textbf{equivalent}
+    \item To convert an NFA to a DFA, create one state in the DFA for every subset of states in the NFA.
+        Draw the transitions accordingly from the NFA for each state in the DFA (which is a subset of the
+        original states)
+\end{itemize}
+\subsection{Minimisation of DFA}
+Suppose we have a DFA $A=(Q,\Sigma,\delta,q_0,F)$. States $p,q$ are indistinguishable iff for all  $w$,
+$\hat{\delta}(p,w)\in F$ iff  $\hat{\delta}(q,w)\in F$. To build a table to determine distinguishable
+pairs,
+\begin{enumerate}
+    \item Base case: Initially, each $(p,q)$ pair such that  $p\in F$ and  $q\notin F$ (or vice versa) is
+        distinguishable
+    \item Inductive step: For any  $a\in\Sigma$, if  $\delta(p,a)$ and  $\delta(q,a)$ are distinguishable,
+        then  $(p,q)$ are distinguishable
+    \item Continue the inductive step, till no more pairs of distinguishable states can be added
+\end{enumerate}
+The new DFA is formed by
+\begin{enumerate}
+    \item First delete all non-reachable states
+    \item Find all nondistinguishable pairs of states
+    \item Each pair of non-distinguishable states is equivalent, and gives an equivalence relation
+    \item States of the new DFA are these equivalence classes
+    \item If $\delta(p,a)=q$ in the original DFA, then  $\delta_{new}(E_p,a)=Eq$ where  $E_p$  and $E_q$
+        are equivalence classes corresponding to  $p$ and  $q$ respectively
+    \item Initial state of the new DFA is the equivalence class containing the start state of the original
+        DFA, final states of the new DFA are all equivalence classes containing a final state
+\end{enumerate}
+\subsection{Parallel Simulation of 2 DFAs}
+\begin{itemize}
+    \item Suppose we have $A=(Q,\Sigma,\delta,q_0,F)$ and $A'=(Q',\Sigma,\delta',q_0',F')$
+    \item Let $A''=(Q\times Q',\Sigma,\delta',(q_0,q_0'),F'')$ where
+        $\delta''((q,q'),a)=(\delta(q,a),\delta'(q',a))$ and  $F''$ depends on the need. Then  $A''$
+        simulates  $A$ and  $A'$ in parallel 
+    \item If $F''=F\times F'$, then  $A''$ accepts the intersection of languages accepted by  $A$ and  $A'$
+    \item If  $F''=F\times Q'\cup Q\times F'$,  $A''$ accepts the union of languages accepted by  $A$
+        and  $A'$
+\end{itemize}
+\section{Regular Languages}
+\subsection{Basis}
+\begin{itemize}
+    \item $\epsilon$ and  $\emptyset$ are regular expressions,  $L(\epsilon)=\{\epsilon\}$ and
+        $L(\emptyset)=\emptyset$
+    \item If $a\in\Sigma$, then $a$ is a regular expression, and  $L(a)=\{a\}$
+\end{itemize}
+\subsection{Induction}
+If $r_1,r_2$ are regular expressions, then so are 
+\begin{itemize}
+    \item $r_1+r_2$. The language is $L(r_1+r_2)=L(r_1)\cup L(r_2)$ 
+    \item $r_1\cdot r_2$. The language is $L(r_1\cdot r_2)=\{xy\mid x\in L(r_1),y\in L(r_2)\}$
+    \item $r_1^*$. The language is $L(r_1^*)=\{x_1x_2,\dots,x_k\mid 1\leq i\leq k,x_i\in L(r_1)\}$
+    \item $(r_1)$. The language is $L((r_1))=L(r_1)$
+\end{itemize}
+\subsection{DFA to Regex}
+\begin{itemize}
+    \item $R_{i,j}^k$ denotes the regex of strings which can be formed by going from state  $i$ to  $j$
+        using intermediate states  $\leq k$
+    \item Base case: for  $R_{i,j}^0$
+         \begin{itemize}
+             \item If $i\neq j$,  $R_{i,j}^0=a_1+a_2+\cdots+a_m$ where $a_1,\dots,a_m$ are all symbols such
+                 that $\delta(i,a_r)=j$
+             \item  If $i=j$,  $R_{i,i}^0=\epsilon+a_1+\cdots+a_m$ where $a_1,\dots,a_m$ are all symbols
+                 such that $\delta(i,a_r)=i$
+        \end{itemize}
+    \item Inductive case: $R_{i,j}^{k+1}=R_{i,j}^k+R_{i,k+1}^k(R_{k+1,k+1})^*R_{k+1,j}^k$
+    \item Regex for the DFA is $\sum_{j\in F}R_{1,j}^n$
+\end{itemize}
+\subsection{Regex Properties}
+\begin{itemize}
+    \item Operator precedence: $*,\cdot,+$
+    \item $M+N=N+M$
+    \item  $L(M+N)=LM+LN$
+    \item  $L+L=L$
+    \item  $(L^*)^*=L^*$
+    \item  $\emptyset^*=\epsilon$
+    \item  $\epsilon^*=\epsilon$
+    \item  $L^+=LL^*=L^*L$
+    \item  $L^*=\epsilon+L^+$
+    \item  $(L+M)^*=(L^*M^*)^*$
+\end{itemize}
+\subsection{Regular Language Properties}
+\begin{thm}[Pumping Lemma]
+    Let $L$ be a regular language. Then there exists a constant  $n$ (dependent on  $L$) such that for
+    every string  $w\in L$ satisfying $\abs{w}\geq n$, $w$ can be broken into three strings  $w=xyz$, such
+    that
+     \begin{enumerate}
+         \item $y\neq\epsilon$
+         \item  $\abs{xy}\leq n$
+         \item For all  $k\geq 0$,  $xy^kz\in L$
+    \end{enumerate}
+\end{thm}
+\begin{itemize}
+    \item If $L_1,L_2$ are regular, so is $L_1\cup L_2$
+    \item If $L_1,L_2$ are regular, so is $L_1\cdot L_2$
+    \item If $L$ is regular, so is  $\overline{L}=\Sigma^*-L$
+    \item If $L_1,L_2$ are regular, so is $L_1\cap L_2$
+    \item If $L_1,L_2$ are regular, so is $L_1-L_2$
+    \item If $L$ is regular, so is  $L^R$
+    \item Let  $h$ be a homomorphism. If  $L$ is regular, so is  $h(L)$
+\end{itemize}
+\begin{defn}[Homomorphism]
+    Let $\Sigma$ and  $\Gamma$ be two alphabets, and suppose  $h$ is a mapping from  $\Sigma$ to
+    $\Gamma^*$.  $h$ can be extended to strings as follows:
+     \begin{itemize}
+         \item $h(\epsilon)=\epsilon$
+         \item  $h(aw)=h(a)\cdot h(w)$ for any  $a\in\Sigma$,  $w\in\Sigma^*$
+    \end{itemize}
+\end{defn}
+\end{multicols}
+\end{document}
