@@ -15,4 +15,5 @@ A collection of resources (mostly cheatsheets) for NUS courses.
 
 **AY24/25 S1**
 - CS3231 Theory of Computation
+- MA3209 Metric and Topological Spaces
 - MA4261 Information and Coding Theory
