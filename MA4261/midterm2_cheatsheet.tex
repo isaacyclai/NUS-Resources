@@ -291,7 +291,7 @@ chain is \textbf{aperiodic}.
     $L(C)=\sum_{x\in\mathcal{X}}p_X(x)l(x)=\mathbb{E}_{p_X}[l(X)]$.
 \end{defn}
 \begin{defn}
-    A code $C$ is \textbf{non-singular} if for all  $x\in\mathcal{X}$ gets mapped to a different codeword,
+    A code $C$ is \textbf{non-singular} if every $x\in\mathcal{X}$ gets mapped to a different codeword,
     i.e. for all  $x,x'\in\mathcal{X}$ such that  $x\neq x'$, we have  $C(x)\neq C(x')$.
 \end{defn}
 \begin{defn}
@@ -323,7 +323,7 @@ chain is \textbf{aperiodic}.
 \end{thm}
 \begin{thm}[Wrong code]
     For the code assignment $l(x)=\floor{\log \frac{1}{q(x)}}$, \[H(p)+D(p\parallel q)\leq E_p
-    l(X)<H(p)+D(p\parallel q)+1\].
+    l(X)<H(p)+D(p\parallel q)+1\]
 \end{thm}
 \subsection{Huffman codes}
 \begin{itemize}
@@ -409,7 +409,7 @@ chain is \textbf{aperiodic}.
          A_\epsilon^{(n)}=A_\epsilon^{(n)}(X,Y)=&\{(x^n,y^n)\in\mathcal{X}^n\times\mathcal{Y}^n:\\
                                                   &\abs{-\frac{1}{n}\log p_{X^n}(x^n)-H(X)}<\epsilon,\\
                                                   &\abs{-\frac{1}{n}\log p_{Y^n}(y^n)-H(Y)}<\epsilon,\\ 
-                                                  &\abs{\left.-\frac{1}{n}\log_{p_{X^n,Y^n}}(x^n,y^n)-H(X,Y)<\epsilon}\right\}
+                                                  &\abs{\left.-\frac{1}{n}\log_{p_{X^n,Y^n}}(x^n,y^n)-H(X,Y)}<\epsilon\right\}
          \end{align*} where $p_{X^n,Y^n}(x^n,y^n)=\prod_{i=1}^n p_{X,Y}(x_i,y_i)$.
 \end{defn}
 \begin{thm}[Joint AEP]
@@ -418,7 +418,7 @@ chain is \textbf{aperiodic}.
          \item  $\abs{A_\epsilon^{(n)}}\leq 2^{n H(X,Y)}$ 
          \item If $(\tilde{X}^n,\tilde{Y}^n)\sim p_{X^n}(x^n)p_{Y^n}(y^n)$, then
              \begin{align*}
-                 (1-\epsilon)2^{-n(I(X;Y)+3\epsilon})&\leq\pr((\tilde{X}^n,\tilde{Y}^n)\in
+                 (1-\epsilon)2^{-n(I(X;Y)+3\epsilon)}&\leq\pr((\tilde{X}^n,\tilde{Y}^n)\in
                  A_\epsilon(x,y))\\
                                                     &\leq 2^{-n(I(X;Y)-3\epsilon)}
              \end{align*}
@@ -437,7 +437,7 @@ chain is \textbf{aperiodic}.
 \subsubsection{Proof of achievability}
 \begin{enumerate}
     \item Fix $p_X(x)$. Generate the codewords in iid fashion.
-    \item By symmetry of codebook generation and uniformity of codewords, choose $w=1$ WLOG. Calculate the
+    \item By symmetry of codebook generation and uniformity of codewords, WLOG choose $w=1$. Calculate the
         error probability and bound it.
     \item Choose a rate $R$ such that the bound approaches 0 as  $n\to\infty$.
 \end{enumerate}
