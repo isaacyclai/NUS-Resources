@@ -1,0 +1,459 @@
+\documentclass[frenchspacing,9pt,landscape,a4paper]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage[linewidth=1pt]{mdframed}
+\usepackage{enumitem}
+\usepackage{times} % Times New Roman font to fit more content
+
+% Even more efficient font
+\usepackage[bitstream-charter]{mathdesign}
+%\usepackage{charter}
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+
+\setlist[itemize]{align=parleft,left=0pt..1em}
+\setlist[enumerate]{align=parleft,left=0pt..1em}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=0.8cm,left=0.8cm,right=0.8cm,bottom=0.8cm} }
+		{\geometry{top=0.8cm,left=0.8cm,right=0.8cm,bottom=0.8cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+\setlength{\columnseprule}{0.1pt}
+
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+\newcommand{\mb}[1]{\mathbf #1}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceiling}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\innerproduct}[2]{\left\langle #1, #2 \right\rangle}
+
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\curl}{\text{curl }}
+\newcommand{\dvg}{\text{div }}
+
+\newcommand{\adj}{\text{adj }}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\pr}{Pr}
+\DeclareMathOperator{\var}{Var}
+
+% -----------------------------------------------------------------------
+\theoremstyle{remark}
+\newtheorem*{thm}{\textbf{Theorem}}
+\newtheorem*{defn}{\textbf{Definition}}
+\newtheorem*{lem}{\textbf{Lemma}}
+
+\title{MA4261 cheatsheet}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{4} % can work with 4 too
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+\begin{mdframed}
+\begin{center}
+    \large{\textbf{MA4261 Information and Coding Theory}} \\
+    \normalsize{\textbf{AY24/25 Semester 1}}\\
+    \small{by Isaac Lai}
+\end{center}	
+\end{mdframed}
+
+\section{Probability}
+\begin{itemize}
+    \item $\var(X)=\mathbb{E}[(X-\mathbb{E}[X])^2]=\mathbb{E}[X^2]-\mathbb{E}[X]^2$
+    \item \textbf{Union bound:} In a probability space with $\sigma$-algebra  $\mathcal{F}$ we have
+        \[\pr\left(\bigcup_{i=1}^k A_i\right)\leq\sum_{i=1}^k\pr(A_i)\] This holds in the infinite case
+        too.
+    \item $\mathbb{E}[X]=\mathbb{E}_Y[\mathbb{E}_X[X\mid Y]]$
+    \item Random variables $X,Y,Z$ form a \textbf{Markov chain} in the order  $X-Y-Z$ if their joint
+        distribution $P_{XYZ}$ satisfies for all  $(x,y,z)\in\mathcal{X}\times\mathcal{Y}\times\mathcal{Z}$
+        \[P_{XYZ}(x,y,z)=P_X(x)P_{Y\mid X}(y\mid x)P_{Z\mid Y}(z\mid y)\]
+        This is equivalent to saying $X$ and  $Z$ are \textbf{conditionally independent given $Y$}.
+    \item \textbf{Markov's Inequality:} Let $X$ be a real-valued non-negative random variable. Then for any
+        $a>0$ we have  $\pr(X>a)\leq \frac{\mathbb{E}[X]}{a}$.
+    \item \textbf{Chebyshev's Inequality:} Let $X$ be a real-valued random variable with mean  $\mu$ and
+        variance  $\sigma^2$. Then for any $a>0$
+        \[\pr(\abs{X-\mu}>a\sigma)\leq \frac{1}{a^2}\]
+    \item \textbf{Weak Law of Large Numbers:} For every $\epsilon>0$,
+        \[\lim_{n\to\infty}\pr\left(\abs{\frac{1}{n}\sum_{i=1}^n
+        X_i}>\epsilon\right)\leq\lim_{n\to\infty}\frac{\sigma^2}{n\epsilon^2}=0\]
+%    \item \textbf{Convexity:} A function $f(x)$ is convex if for all  $x,y$ and  $\lambda\in[0,1]$,
+%        $f(\lambda x+(1-\lambda)y)\leq\lambda f(x)+(1-\lambda)f(y)$
+\end{itemize}
+\section{Information Quantities}
+\begin{defn}
+    The \textbf{entropy} $H(X)$ of a discrete random variable  $X$ is defined by
+    \[H(X)=-\sum_{x\in\mathcal{X}}p(x)\log p(x)\]
+\end{defn}
+\subsection{Properties of $H$}
+\begin{enumerate}
+    \item $H(X)\geq 0$
+    \item  $H_b(X)=(\log_ba)H_a(X)$ (binary entropy)
+    \item (Conditioning does not increase entropy) For any two random variables  $X$ and  $Y$,  $H(X\mid
+        Y)\leq H(X)$ with equality iff  $X$ and  $Y$ are independent.
+    \item $H(X_1,X_2,\dots,X_n)\leq\sum_{i=1}^n H(X_i)$ with equality iff all $X_i$ are independent.
+    \item  $H(X)\leq\log\abs{\mathcal{X}}$ with equality iff  $X$ is distributed uniformly over
+        $\mathcal{X}$.
+    \item  $H(p)$ is concave in  $p$.
+    \item \textbf{Han's Inequality:}
+        \[H(X_1,\dots,X_n)\leq \frac{1}{n-1}\sum_{i=1}^n H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n)\]
+    \item $H(g(X))\leq H(X)$
+\end{enumerate}
+\begin{defn}
+    The \textbf{relative entropy} $D(p\parallel q)$ of pmf $p$ wrt pmf $q$ is
+    \[D(p\parallel q)=\sum_x p(x)\log  \frac{p(x)}{q(x)}\]
+\end{defn}
+\begin{defn}
+    The \textbf{mutual information} between two random variables $X$ and  $Y$ is defined as
+    \[I(X;Y)=\sum_{x\in\mathcal{X}}\sum_{y\in\mathcal{Y}}p(x,y)\log \frac{p(x,y)}{p(x)p(y)}\]
+\end{defn} Alternatively,
+\begin{align*}
+    H(X)&=E_p\log \frac{1}{p(X)}\\
+    H(X,Y)&=E_p\log \frac{1}{p(X,Y)}\\
+    H(X\mid Y)&=E_p\log \frac{1}{p(X\mid Y)}\\
+    I(X;Y)&=E_p\log \frac{p(X,Y)}{p(X)p(Y)}\\
+    D(p\parallel q)&=E_p\log \frac{p(X)}{q(X)}
+\end{align*}
+\subsection{Properties of $D$ and  $I$}
+\begin{enumerate}
+    \item $I(X;Y)=H(X)-H(X\mid Y)=H(Y)-H(Y\mid X)=H(X)+H(Y)-H(X,Y)$
+    \item  $D(p\parallel q)\geq 0$ with equality iff  $p(x)=q(x)$ for all  $x\in\mathcal{X}$
+    \item  $I(X;Y)=D(p(x,y)\parallel p(x)p(y))\geq 0$ with equality iff  $p(x,y)=p(x)p(y)$, i.e.  $X$ and
+         $Y$ are independent. 
+     \item If $\abs{\mathcal{X}}=m$ and  $u$ is the uniform distribution over  $\mathcal{X}$, then
+         $D(p\parallel q)=\log m-H(p)$.
+     \item  $D(p\parallel q)$ is convex in the pair  $(p,q)$.
+\end{enumerate}
+\subsection{Chain rules}
+\begin{itemize}
+    \item Entropy: $H(X_1,X_2,\dots,X_n)=\sum_{i=1}^n H(X_i\mid X_{i-1},\dots, X_1)$
+    \item Mutual information: $I(X_1,X_2,\dots, X_n;Y)=\sum_{i=1}^n I(X_i;Y\mid X_1,X_2,\dots,X_{i-1})$
+    \item Relative entropy: $D(p(x,y)\parallel q(x,y))=D(p(x)\parallel q(x))+D(p(y\mid x)\parallel q(y\mid
+        x))$
+\end{itemize}
+\subsection{Important results}
+\begin{itemize}
+    \item \textbf{Jensen's Inequality:} If $f$ is a convex function, then  $\mathbb{E}f(X)\geq
+        f(\mathbb{E}X)$ 
+    \item \textbf{Log sum Inequality:} For $n$ positive numbers,  $a_1,a_2,\dots,a_n$ and
+        $b_1,b_2,\dots,b_n$
+        \[\sum_{i=1}^n a_i\log \frac{a_i}{b_i}\geq\left(\sum_{i=1}^n a_i\right)\log
+        \frac{\sum_{i=1}^na_i}{\sum_{i=1}^n b_i}\] with equality iff $\frac{a_i}{b_i}=$ constant.
+    \item \textbf{Data-processing Inequality:} If $X\to Y\to Z$ forms a Markov chain,  $I(X;Y)\geq I(X;Z)$.
+    \item \textbf{Sufficient statistic:}  $T(X)$ is sufficient relative to  $\{f_\theta(x)\}$ iff
+        $I(\theta;X)=I(\theta;T(X))$ for all distributions on  $\theta$.
+    \item \textbf{Fano's Inequality:} Let $P_e=\pr\{\hat{X}(Y)\neq X\}$. Then
+        \[H(P_e)+P_e\log\abs{\mathcal{X}}\geq H(X\mid Y)\] This can be loosened to
+        \[P_e\geq \frac{H(X\mid Y)-1}{\log\abs{\mathcal{X}}}\]
+    \item If $X$ and  $X'$ are i.i.d., then  $\pr(X=X')\geq 2^{-H(X)}$
+\end{itemize}
+\section{Asymptotic Equipartition Property}
+\begin{defn}
+    The \textbf{typical set} of $X$, a discrete memoryless source (DMS) is defined as 
+    \[A_\epsilon^{(n)}(X):=\left\{x^n\in\mathcal{X}^n:\abs{\frac{1}{n}\log
+    \frac{1}{P_{X^n}(x^n)}-H(X)}\leq\epsilon\right\}\] where for all $x^n\in\mathcal{X}^n$
+    \[P_{X^n}(x^n)=\pr(X^n=x^n)=\prod_{i=1}^n P_X(x_i)\]
+\end{defn}
+\begin{thm}[AEP]
+    \begin{enumerate}
+        \item $\pr(X^n\in A_\epsilon^{(n)}(X))\geq 1-\epsilon$ for all sufficiently large  $n$.
+        \item The size of the typical set satisfies
+            $(1-\epsilon)2^{n(H(X)-\epsilon)}\leq\abs{A_\epsilon^{(n)}(X)}\leq 2^{n(H(X)+\epsilon)}$.
+    \end{enumerate}
+\end{thm}
+\begin{defn}[Code]
+    An $(n,2^{nR})$-fixed-to-fixed-length source code consists of an encoder  $f$ and a decoder  $\varphi$
+    where
+    \begin{enumerate}
+        \item $f:\mathcal{X}^n\to\{1,\dots,2^{nR}\}$ and
+        \item  $\varphi:\{1,\dots,2^{nR}\}\to\mathcal{X}^n$
+    \end{enumerate} $n$ is the blocklength of the code and  $R$ is the rate of the code.
+\end{defn}
+\begin{defn}[Achievable rate]
+    $R\geq 0$ is achievable if there exists a sequence of  $(n,2^{nR})$-codes such that
+    $\lim_{n\to\infty}\pr(\hat{X}^n\neq X^n)=0$ where  $\hat{X}^n=\varphi(M)$ and  $M=f(X^n)$ are the
+    reconstructed source and compression index respectively.
+\end{defn}
+\begin{defn}[Optimum Source Coding Rate]
+    The optimum source coding rate for the DMS $X$ is $R^*(X)=\inf\{R:R\text{ is achievable}\}$.
+\end{defn}
+\begin{thm}[Fixed-to-Fixed-Length Data Compression]
+    \begin{align*}
+        R^*(X)=H(X) 
+    \end{align*}
+\end{thm}
+\begin{thm}
+    If $R<H(X)$, then  $P_e^{(n)}:=\pr(\hat{X}^n\neq X^n)\to 1$ as  $n\to\infty$.
+\end{thm}
+\begin{thm}[Han-Verdu Lemma]
+    Fix any $(n,2^{nR})$-code. Then  $P_e=\pr(\hat{X}^n\neq X^n)$ satisfies
+    \[P_e\geq\sup_{\gamma>0}\pr\left\{\frac{1}{n}\log \frac{1}{P_{X^n}(X^n)}\geq
+    R+\gamma\right\}-e^{-n\gamma}\]
+\end{thm}
+\begin{thm}
+    Let $B_\delta^{(n)}\subset\mathcal{X}^n$ be such that if  $X_1,X_2,\dots\sim P_X$, then for every
+    $\delta\in(0,1)$,  $\pr(X^n\in B_\delta^{(n)})\geq 1-\delta$ for all  $n$ sufficiently large. Then for
+    any $\delta'>0$,
+    \[\frac{1}{n}\log\abs{B_\delta^{(n)}}\geq H(X)-\delta'\] for $n$ sufficiently large. Here  $H(X)$ is
+    computed wrt PMF  $P_X$
+\end{thm}
+\section{Entropy Rates of Stochastic Processes}
+A \textbf{stochastic process} $\{x_i\}_{i\in\BN}$ is an indexed sequence of random variables where  $i$ is
+the time.
+\begin{defn}
+    A stochastic process is \textbf{stationary} if
+    $\pr(X_1=x_1,\dots,X_n=x_n)=\pr(X_{1+\ell}=x_1,\dots,X_{n+\ell}=x_n)$ for all $n\in\BN$ and every shift
+    $\ell\in\BN$, and for all $x_1,\dots,x_n\in\mathcal{X}$
+\end{defn}
+\begin{defn}
+    A stochastic process is a \textbf{Markov chain} if $\forall n\geq 1$,  $\pr(X_{n+1}=x_{n+1}\mid
+    X_1=x_1,\dots,X_n=x_n)=\pr(X_{n+1}=x_{n+1}\mid X_n=x_n)$ $\forall x_1,\dots,x_{n+1}\in\mathcal{X}$
+\end{defn}
+\begin{defn}
+    The Markov chain is \textbf{time-invariant} if $P(x_{n+1}\mid x_n)$ does not depend on  $n$. Such a
+    Markov chain is charactersied by a transition probability matrix (TPM)  $P=[P_{ij}]$,
+    $i,j\in\mathcal{X}$,  $P_{ij}=\pr(X_{n+1}=j\mid X_n=i)$ for all time-invariant  $n$. In other words, we
+    have  $p_{n+1}=p_nP$
+\end{defn}
+If it is possible to go from any state to any other in a finite number of steps, the Markov chain is
+\textbf{irreducible}. If the GCD of the lengths of different paths from a state to itself is 1, the Markov
+chain is \textbf{aperiodic}.
+\begin{defn}[Entropy rate]
+    Two definitions:
+    \begin{align*}
+        H(X)&=\lim_{n\to\infty}\frac{1}{n}H(X_1,X_2,\dots,X_n)\\
+        H'(X)&=\lim_{n\to\infty}H(X_n\mid X_{n-1},X_{n-2},\dots,X_1)
+    \end{align*} For a stationary stochastic process, $H(\mathcal{X})=H'(\mathcal{X})$
+\end{defn}
+\begin{thm}[Cesaro mean]
+    If $a_n\to a$ and  $b_n=\frac{1}{n}\sum_{i=1}^n a_i$, then $b_n\to a$.
+\end{thm}
+\begin{thm}[Shannon-McMillan-Breiman]
+    For a stationary, ergodic (irreducible and aperiodic) process, the AEP holds: $\lim_{n\to\infty}-\frac{1}{n}\log
+    p(X_1,\dots,X_n)=H(X)$
+\end{thm}
+\begin{itemize}
+    \item \textbf{Entropy rate of an ergodic Markov chain:} $H(X)=H'(X)=H(X_2\mid X_1)$ 
+    \item \textbf{Functions of a Markov chain:} If  $X_1,X_2,\dots,X_n$ form a stationary Markov chain and
+        $Y_i=\phi(X_i)$, then
+        \begin{align*}
+            H(Y_n\mid Y^{n-1},X_1)&\leq H(Y)\leq H(Y_n\mid Y^{n-1})\\
+            \lim_{n\to\infty}H(Y_n\mid Y^{n-1},X_1)&=H(Y)=\lim_{n\to\infty}H(Y_n\mid Y^{n-1})\\
+        \end{align*}
+\end{itemize}
+\section{Fixed-to-Variable-Length Source Coding}
+\begin{defn}
+    A fixed-to-variable-length (F2V) source code for a random variable $X$ is a map  $C$ for  $\mathcal{X}$
+    to  $\{0,1\}^*$.  $C(x)$ is the codeword corresponding to  $x\in\mathcal{X}$ and  $l(w)$ is the length
+    of the codeword corresponding to  $x\in\mathcal{X}$.
+\end{defn}
+\begin{defn}
+    The expected length $L(C)$ of a code  $C:\mathcal{X}\to\{0,1\}^*$ for a random variable  $X\sim p_X$ is
+    $L(C)=\sum_{x\in\mathcal{X}}p_X(x)l(x)=\mathbb{E}_{p_X}[l(X)]$.
+\end{defn}
+\begin{defn}
+    A code $C$ is \textbf{non-singular} if for all  $x\in\mathcal{X}$ gets mapped to a different codeword,
+    i.e. for all  $x,x'\in\mathcal{X}$ such that  $x\neq x'$, we have  $C(x)\neq C(x')$.
+\end{defn}
+\begin{defn}
+    The \textbf{extension} $C^*$ of a code  $C$ is the map from finite-length strings in $\mathcal{X}$ to
+    finite-length strings in  $\{0,1\}^*$.
+\end{defn}
+\begin{defn}
+    A \textbf{uniquely decodable} code is one in which its extension is non-singular.
+\end{defn}
+\begin{defn}
+    A code is called \textbf{prefix-free} or \textbf{instantaneous} if no codeword is a prefix of any other
+    codeword.
+\end{defn}
+\begin{thm}[Kraft's Inequality]
+    For any PF code over an alphabet of size 2, its codeword lengths  $l_1,l_2,\dots,l_m$ must satisfy
+    $\sum_{i=1}^m 2^{-l_i}\leq 1$. Conversely, if the inequality is satisfied, then there exists a PF code
+    with those lengths.
+\end{thm}
+\begin{thm}
+    The expected codeword length $L^*$ of any binary PF code for a random variable  $X$ satisfies  $L^*\geq
+    H(X)$ with equality iff  $2^{-l_i}=p_i$. Moreover, $L^*<H(X)+1$.
+\end{thm}
+\begin{defn}[Shannon code]
+    For all  $i\in\mathcal{X}$, $l_i=\ceiling{\log \frac{1}{p_i}}$
+\end{defn}
+\begin{thm}[Coding over long blocks]
+    We have $\frac{H(X^n)}{n}\leq L_n^*<\frac{H(X^n)}{n}+\frac{1}{n}$. If
+    $\mathcal{X}=\{X_n\}_{n=1}^\infty$ is a stationary stochastic process, then $L_n^*\to H(\mathcal{X})$.
+\end{thm}
+\begin{thm}[Wrong code]
+    For the code assignment $l(x)=\floor{\log \frac{1}{q(x)}}$, \[H(p)+D(p\parallel q)\leq E_p
+    l(X)<H(p)+D(p\parallel q)+1\].
+\end{thm}
+\subsection{Huffman codes}
+\begin{itemize}
+    \item We expect that an optimal PF code will have the longest codeword for the two least probable
+        symbols. Otherwise we can delete one bit from the longer one and retain the PF property while
+        decreasing the expected codeword length.
+    \item Algorithm: rank symbols by probability. Combine the two least probable ones, and re-rank the
+        probabilities. Repeat this process until we only have one symbol, then generate the codewords using
+        the binary tree by branching with 0 and 1 at each node.
+    \item WLOG $p_1\geq p_2\geq\cdots\geq p_m$. The code is optimal iff $\sum p_il_i$ is minimised.
+    \item There exists an opitmal code with $l_1\leq l_2\leq\cdots\leq l_m$ where $C(m-1)$ and $C(m)$ are
+        siblings that differ only in their last bits.
+    \item The Huffman procedure yields an optimal code.
+\end{itemize}
+\section{Channel Capacity}
+\begin{defn}
+    A \textbf{discrete} channel is a system consisting of (1) input alphabet $\mathcal{X}$, (2) output
+    alphabet  $\mathcal{Y}$, and (3) probability transition matrix $p_{Y\mid X}$.
+\end{defn}
+\begin{defn}
+    The channel is \textbf{memoryless} if the probaiblity distribution of the output at time $i$ depends
+    only on the input at time  $i$, i.e. for all  $x^n,y^n$,  \[\pr(Y^n=y^n\mid X^n=x^n)=\prod_{i=1}^n
+    p_{Y\mid X}(y_i\mid x_i)\]
+\end{defn}
+\begin{defn}
+    The \textbf{channel capacity} of a DMC $(\mathcal{X},\mathcal{Y},p_{Y\mid X})$ is
+    \[C=C(p_{Y\mid X})=\max_{p_X} I(X;Y)\]
+\end{defn}
+\begin{defn}
+    The \textbf{$n$-th extension of a DMC} $(\mathcal{X},p(y\mid x),\mathcal{Y})$ without feedback is the
+    channel  $(\mathcal{X}^n,p(y^n\mid x^n),\mathcal{Y}^n)$ where $p(y^n\mid x^n)=\prod_{i=1}^n p(y_i\mid
+    x_i)$ for  $(x^n,y^n)\in\mathcal{X}^n\times\mathcal{Y}^n$.
+\end{defn}
+\begin{defn}
+    An \textbf{$(M,n)$-code} for the DMC $(\mathcal{X},p(y\mid x),\mathcal{Y})$ consists of (1) the message
+    set  $\{1,\dots,M\}$, (2) the encoder  $f:\{1,\dots,M\}\to\mathcal{X}^n$, (3) the decoder
+    $\varphi:\mathcal{Y}^n\to\{1,\dots,M\}$.
+\end{defn}
+\begin{defn}
+    The \textbf{conditional probability of error} of a code $(f,\varphi)$ of sending a message
+    $w\in[M]=\{1,\dots,M\}$ is
+     \begin{align*}
+         \lambda_w&=\pr(\varphi(Y^n\neq w\mid X^n=w^n(w))\\
+                  &=\sum_{y^n}p_{Y^n\mid X^n}(y^n\mid x^n(w))\mb{1}\{\varphi(y^n)\neq w\}
+    \end{align*}
+\end{defn}
+\begin{defn}
+    The \textbf{maximal probability of error} of a code $(f,\varphi)$ is
+    $\lambda_{max}^{(n)}=\max_{w\in[M]}\lambda_w$.
+\end{defn}
+\begin{defn}
+    The \textbf{average probability of error} of a code $(f,\varphi)$ is
+    $P_e^{(n)}=\lambda_{ave}^{(n)}=\frac{1}{M}\sum_{w=1}^M\lambda_w$.
+\end{defn}
+\begin{defn}
+    The \textbf{rate} of an $(M,n)$-code is  $R=\frac{1}{n}\log M$ bits per channel use, or
+    $R=\frac{1}{n}\ln M$ nats per channel use.
+\end{defn}
+\begin{defn}
+    A rate $R\geq 0$ is \textbf{achievable} for a DMC  $p_{Y\mid X}$ if there exists a sequence of
+    $(2^{nR},n)$-codes such that  $\lambda_{max}^{(n)}\to 0$ as  $n\to\infty$. Note that if $R\geq 0$ is
+    achievable, then  $R'\leq R$ is achievable too.
+\end{defn}
+\begin{defn}
+    The \textbf{capacity} of a DMC $p_{Y\mid X}$ is
+    \[\tilde{C}=\tilde{C}(p_{Y\mid X})=\sup\{R\geq 0: R\text{ is achievable}\}\]
+\end{defn}
+\begin{thm}
+    $\tilde{C}=C(p_{Y\mid X})=\max_{p_X} I(p_X,p_{Y\mid X})$
+\end{thm}
+\subsection{Examples}
+\begin{itemize}
+    \item Noiseless binary channel, noisy channel with non-overlapping output: $C=1$
+    \item Binary symmetric channel:  $C=1-H_b(p)$ when  $p_X$ is uniform on  $\{0,1\}$
+    \item Binary erasure channel:  $C=1-\alpha$ when  $p_X$ is uniform on  $\{0,1\}$
+    \item Symmetric channels (doubly stochastic PTM, rows and columns are permutations of one another respectively):
+        $C=\log\abs{\mathcal{Y}}-H(\mb{r})$ where  $\mb{r}$ is the distribution on one row
+\end{itemize}
+\subsection{Jointly Typical Sequences}
+\begin{defn}
+    The set $A_\epsilon^{(n)}(X,Y)$ of jointly typical sequences  $(x^n,y^n)$ wrt  $p_{X,Y}$ is
+     \begin{align*}
+         A_\epsilon^{(n)}=A_\epsilon^{(n)}(X,Y)=&\{(x^n,y^n)\in\mathcal{X}^n\times\mathcal{Y}^n:\\
+                                                  &\abs{-\frac{1}{n}\log p_{X^n}(x^n)-H(X)}<\epsilon,\\
+                                                  &\abs{-\frac{1}{n}\log p_{Y^n}(y^n)-H(Y)}<\epsilon,\\ 
+                                                  &\abs{\left.-\frac{1}{n}\log_{p_{X^n,Y^n}}(x^n,y^n)-H(X,Y)<\epsilon}\right\}
+         \end{align*} where $p_{X^n,Y^n}(x^n,y^n)=\prod_{i=1}^n p_{X,Y}(x_i,y_i)$.
+\end{defn}
+\begin{thm}[Joint AEP]
+     \begin{enumerate}
+         \item $\pr((X^n,Y^n)\in A_\epsilon^{(n)})\to 1$ as  $n\to\infty$
+         \item  $\abs{A_\epsilon^{(n)}}\leq 2^{n H(X,Y)}$ 
+         \item If $(\tilde{X}^n,\tilde{Y}^n)\sim p_{X^n}(x^n)p_{Y^n}(y^n)$, then
+             \begin{align*}
+                 (1-\epsilon)2^{-n(I(X;Y)+3\epsilon})&\leq\pr((\tilde{X}^n,\tilde{Y}^n)\in
+                 A_\epsilon(x,y))\\
+                                                    &\leq 2^{-n(I(X;Y)-3\epsilon)}
+             \end{align*}
+             
+    \end{enumerate}
+\end{thm}
+\subsection{Channel Coding Theorem}
+\begin{thm}[Direct/Achievability]
+    For a DMC, all rates $R<C$ are achievable. For all  $R<C$, there exists a sequence (in
+    $n\to\infty$) of  $(2^{nR},n)_{n\in\BN}$-codes with  $\lambda_{max}^{(n)}\to 0$.
+\end{thm}
+\begin{thm}[Converse/Impossibility]
+    Conversely, any sequence of $(2^{nR},n)_{n\in\BN}$-codes with  $\lambda_{ave}^{(n)}\to 0$ satisfies
+    $R\leq C$. (Proof using Fano's inequality)
+\end{thm}
+\subsubsection{Proof of achievability}
+\begin{enumerate}
+    \item Fix $p_X(x)$. Generate the codewords in iid fashion.
+    \item By symmetry of codebook generation and uniformity of codewords, choose $w=1$ WLOG. Calculate the
+        error probability and bound it.
+    \item Choose a rate $R$ such that the bound approaches 0 as  $n\to\infty$.
+\end{enumerate}
+\begin{defn}
+    The \textbf{feedback capacity} $C_{FB}(p_{Y\mid X})$ is the supremum of all achievable rates with
+    feedback codes.
+\end{defn}
+\begin{thm}
+    $C_{FB}=C=\max_{p_X} I(X;Y)$
+\end{thm}
+\begin{thm}[Source-channel Separation Theorem]
+    If $\{V_n\}$ is a finite-alphabet stationary stochastic process that satisfies AEP and
+    $H(\mathcal{V})<C$, then there exists a source-channel code  $(f_n,\varphi_n)$ with  $P_e^{(n)}\to 0$.
+    This code can be realised by a separation scheme. Conversely, for all stationary stochastic processes
+    $\{V^n\}$ with  $H(\mathcal{V})>C$,  $P_e^{(n)}\nrightarrow 0$, i.e.
+    $\limsup_{n\to\infty}P_e^{(n)}>0$.
+\end{thm}
+\end{multicols}
+\end{document}
